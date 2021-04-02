@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "160286761407",
+    "project_id": "managing-parking-system",
+    "storage_bucket": "managing-parking-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160286761407:android:1b8187e862ac720d99c10a",
+        "android_client_info": {
+          "package_name": "com.sigtramonto.mps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160286761407-rf8fc3votegbpfo5gkiuebqe1fs3gk7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGwOYzanrKn2wqOIpRf7EJinNcOU3qrqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160286761407-rf8fc3votegbpfo5gkiuebqe1fs3gk7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
