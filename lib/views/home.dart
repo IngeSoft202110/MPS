@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("Managing Parking System"),
+        title: Text("FEA"),
         actions: [
           InkWell(
             onTap: () {
