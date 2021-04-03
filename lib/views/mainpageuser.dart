@@ -8,6 +8,10 @@ class MainPageUser extends StatefulWidget {
 class _MainPageUserState extends State<MainPageUser> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Column(
+        children: [],
+      ),
+    );
   }
 }
