@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sigtramonto.mps">
+    package="com.example.mps">
    <application
         android:label="mps"
         android:icon="@mipmap/ic_launcher">
