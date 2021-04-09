@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/database.dart';
+import 'package:mps/views/showRoute.dart';
 
 class VisualizeParking extends StatefulWidget {
   final String value;
@@ -188,11 +189,19 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 0),
-                            child: Text("Como llegar: ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                )),
+                            child: GestureDetector(
+                              child: Text("Como llegar: ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  )),
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ShowRoute()));
+                              },
+                            ),
                           ),
                         ],
                       ),
