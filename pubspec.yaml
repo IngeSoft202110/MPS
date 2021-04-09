@@ -15,15 +15,18 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image:
-  firebase_auth: 
+  firebase_auth:
   firebase_core: ^1.0.3
   google_sign_in:
   shared_preferences:
   random_string:
-  cloud_firestore: 
+  cloud_firestore:
+  geocoding:
+  geolocator:
+
 
   flutter_polyline_points:
-  google_maps_flutter: 
+  google_maps_flutter:
   rxdart: any
   geoflutterfire:
 
