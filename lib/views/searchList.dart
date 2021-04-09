@@ -12,6 +12,7 @@ class SearchList extends StatefulWidget {
   _SearchList createState() => _SearchList();
 }
 
+//Search...
 class _SearchList extends State<SearchList> {
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
