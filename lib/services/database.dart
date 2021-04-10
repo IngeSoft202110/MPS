@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:rxdart/rxdart.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
@@ -30,29 +29,30 @@ class Queries {
       );
 
   //Nearby places
-  Future<List<QueryDocumentSnapshot>> nearby(double latitude, longitud) async {
-    List<QueryDocumentSnapshot> lista = [];
-    List<Location> coordenadas;
+  Future<List<QueryDocumentSnapshot>> nearby(
+          double latitude, double longitud) =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+          // ignore: missing_return
+          .then((snapshot) async {
+        var docs = snapshot.docs;
+        List<QueryDocumentSnapshot> lista = [];
+        for (var doc in docs) {
+          List<Location> coordenadas;
 
-    FirebaseFirestore.instance
-        .collection('parqueaderos')
-        .get()
-        .then((snapshot) async {
-      var docs = snapshot.docs;
-      for (var doc in docs) {
-        coordenadas =
-            await locationFromAddress(doc['direccion'] + ", Bogota, Colombia");
-        double distanceInMeters = Geolocator.distanceBetween(latitude, longitud,
-            coordenadas.first.latitude, coordenadas.first.longitude);
-
-        if (distanceInMeters <= 4000) {
-          lista.add(doc);
+          coordenadas = await locationFromAddress(
+              doc['direccion'] + ", Bogota, Colombia");
+          double distanceInMeters = Geolocator.distanceBetween(
+              latitude,
+              longitud,
+              coordenadas.first.latitude,
+              coordenadas.first.longitude);
+          print(distanceInMeters);
+          if (distanceInMeters <= 4000) {
+            lista.add(doc);
+          }
         }
-      }
-    });
-
-    return lista;
-  }
+        return lista;
+      });
 
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
@@ -60,4 +60,6 @@ class Queries {
         FirebaseFirestore.instance.collection('parqueaderos').snapshots();
     return temp;
   }
+
+  //Save parking in map
 }
