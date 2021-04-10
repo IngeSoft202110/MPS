@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'home.dart';
-import 'package:mps/views/DisplayList.dart';
+import 'package:mps/views/displayList.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 
