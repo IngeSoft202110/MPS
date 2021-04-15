@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
+import 'package:mps/services/database.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
+
+import 'displayList.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +13,37 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<QueryDocumentSnapshot> lista;
+  Stream<QuerySnapshot> allDocuments;
+
+  @override
+  void initState() {
+    allDocuments = Queries().allDocuments();
+    super.initState();
+  }
+
+  Future searchRanking()async {
+    lista = await Queries()
+        .ranking();
+                              
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+  }
+  Future searchPriceCar()async {
+    lista = await Queries()
+        .priceCar();
+                              
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+  }
+  Future searchPriceMot()async {
+    lista = await Queries()
+        .pricemMotorcycle();
+                              
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,18 +117,57 @@ class _HomeState extends State<Home> {
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),
-                            child: Text("Precio"),
+                            child: GestureDetector(
+                                child: Text("Price"),
+                                onTap: () {
+                                  //lol
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25, vertical: 10),
+                                      child: GestureDetector(
+                                          child: Text("Price CAR"),
+                                          onTap: () {
+                                            searchPriceCar();
+                                          }
+                                        ),
+                                      ),
+                                  );
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25, vertical: 10),
+                                      child: GestureDetector(
+                                          child: Text("Price Motorcycle"),
+                                          onTap: () {
+                                            searchPriceMot();
+                                          }
+                                        ),
+                                      ),
+                                  );
+                                },
+                            )
                           ),
                         ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                         Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            child: Text("Ranking"),
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 10), 
+                              child: GestureDetector(
+                                child: Text("Ranking"),
+                              
+                                onTap: () {
+                                
+                                  searchRanking();
+                              
+                                },
+                              ),
+                            ),
                           ),
-                        ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                       ],
                     ),
