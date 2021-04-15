@@ -4,7 +4,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mps/services/google_maps_requests.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:uuid/uuid.dart';
 
 class ShowRoute extends StatefulWidget {
@@ -65,7 +64,50 @@ class _MapState extends State<Map> {
                 compassEnabled: true,
                 markers: _markers,
                 onCameraMove: _onCameraMove,
+                polylines: _polyLines,
               ),
+
+              // Positioned(
+              //   top: 105.0,
+              //   right: 15.0,
+              //   left: 15.0,
+              //   child: Container(
+              //     height: 50.0,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(3.0),
+              //       color: Colors.white,
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.grey,
+              //             offset: Offset(1.0, 5.0),
+              //             blurRadius: 10,
+              //             spreadRadius: 3)
+              //       ],
+              //     ),
+              //     child: TextField(
+              //       cursorColor: Colors.black,
+              //       textInputAction: TextInputAction.go,
+              //       onSubmitted: (value) {
+              //         sendRequest(value);
+              //       },
+              //       decoration: InputDecoration(
+              //         icon: Container(
+              //           margin: EdgeInsets.only(left: 20, top: 5),
+              //           width: 10,
+              //           height: 10,
+              //           child: Icon(
+              //             Icons.local_taxi,
+              //             color: Colors.black,
+              //           ),
+              //         ),
+              //         hintText: "destination?",
+              //         border: InputBorder.none,
+              //         contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               // Positioned(
               //   top: 40,
               //   right: 10,
@@ -95,33 +137,46 @@ class _MapState extends State<Map> {
     });
   }
 
-  void _onAddMarkerPressed() {
+  void _addMarker(LatLng location, String address) {
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId(_lastPosition.toString()),
-          position: _lastPosition,
+          position: location,
           infoWindow: InfoWindow(
-            title: "feo",
-            snippet: "good place",
+            title: address,
+            snippet: "Destino",
           ),
           icon: BitmapDescriptor.defaultMarker));
     });
   }
 
+  void createRoute(String encondedPoly) {
+    setState(() {
+      print("puntos:");
+      print(_convertToLatLng(_decodePoly(encondedPoly)));
+
+      _polyLines.add(Polyline(
+          polylineId: PolylineId(_lastPosition.toString()),
+          width: 2,
+          points: _convertToLatLng(_decodePoly(encondedPoly)),
+          color: Colors.black));
+    });
+  }
+
   //Convert list of doubles into LatLng
-  List<LatLng> converToLatLng(List points) {
+  List<LatLng> _convertToLatLng(List points) {
     List<LatLng> result = <LatLng>[];
     for (int i = 0; i < points.length; i++) {
       if (i % 2 != 0) {
         result.add(LatLng(points[i - 1], points[i]));
       }
-      return result;
     }
+    return result;
   }
 
   List _decodePoly(String poly) {
     var list = poly.codeUnits;
-    var lList;
+    var lList = [];
     int index = 0;
     int len = poly.length;
     int c = 0;
@@ -183,10 +238,29 @@ class _MapState extends State<Map> {
     setState(() {
       _initialPosition = LatLng(position.latitude, position.longitude);
       locationController.text = placemark[0].name;
+      sendRequest("carrera 7 # 45");
     });
   }
 
   void sendRequest(String intendedLocation) async {
-    List<Placemark> placemark;
+    List<Location> position;
+
+    position =
+        await locationFromAddress(intendedLocation + ", Bogota, Colombia");
+    //List<Placemark> placemark = await placemarkFromCoordinates(position.first.latitude, position.first.longitude);
+
+    double latitude = position.first.latitude;
+    double longitude = position.first.longitude;
+
+    LatLng destination = LatLng(latitude, longitude);
+    _addMarker(_initialPosition, intendedLocation);
+    _addMarker(destination, intendedLocation);
+
+    print("estoy en: ");
+    print(_initialPosition);
+
+    String route = await _googleMapsServices.getRouteCoordinates(
+        _initialPosition, destination);
+    createRoute(route);
   }
 }
