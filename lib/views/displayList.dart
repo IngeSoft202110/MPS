@@ -22,15 +22,6 @@ class _DisplayList extends State<DisplayList> {
       appBar: new AppBar(
         backgroundColor: Colors.blue[900],
         title: Text("Managing Parking System"),
-        actions: [
-          InkWell(
-            onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => SearchList()));
-            },
-            child: Container(child: Icon(Icons.arrow_back)),
-          )
-        ],
       ),
       body: new SingleChildScrollView(
         child: new Column(

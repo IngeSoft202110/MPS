@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'home.dart';
 import 'package:mps/views/displayList.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
+import 'package:mps/views/home.dart';
 
 //Search parking lot nearby
 class SearchList extends StatefulWidget {
@@ -17,7 +17,7 @@ class _SearchList extends State<SearchList> {
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
   List<Location> locations;
-  String address, latitude, longitude;
+  String address, latitude, longitude, error = "____";
 
   @override
   void initState() {
@@ -31,15 +31,25 @@ class _SearchList extends State<SearchList> {
 
     lista = await Queries()
         .nearby(locations.first.latitude, locations.first.longitude);
-
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+    if (lista.isNotEmpty) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+    } else {
+      setState(() {
+        error = "No hubo resultados para la búsqueda";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Home())),
+          ),
           backgroundColor: Colors.blue[900],
           title: Text("Managing Parking System"),
         ),
@@ -54,13 +64,6 @@ class _SearchList extends State<SearchList> {
               ),
               Text("Buscar por cercanía",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              GestureDetector(
-                child: Text("Atrás"),
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Home()));
-                },
-              ),
               //Spacer(),
               TextFormField(
                 decoration: InputDecoration(
@@ -73,7 +76,13 @@ class _SearchList extends State<SearchList> {
               //Spacer(),
               new GestureDetector(
                 onTap: () {
-                  search(address);
+                  if (address != null) {
+                    search(address);
+                  } else {
+                    setState(() {
+                      error = "Escriba una dircción";
+                    });
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -90,27 +99,7 @@ class _SearchList extends State<SearchList> {
                   ),
                 ),
               ),
-
-              StreamBuilder(
-                stream: allDocuments,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return new CircularProgressIndicator();
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot course = snapshot.data.docs[index];
-                      return ListTile(
-                        leading: Image.network(course['imagen']),
-                        title: Text(course['nombre']),
-                        subtitle: Text(course['direccion']),
-                      );
-                    },
-                  );
-                },
-              )
+              Text(error),
 
               //Spacer(),
             ],

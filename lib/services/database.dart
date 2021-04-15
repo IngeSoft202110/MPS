@@ -61,5 +61,7 @@ class Queries {
     return temp;
   }
 
-  //Save parking in map
+  //Return specific parking by id
+  Stream<DocumentSnapshot> parkingLotById(String id) =>
+      FirebaseFirestore.instance.collection("parqueaderos").doc(id).snapshots();
 }

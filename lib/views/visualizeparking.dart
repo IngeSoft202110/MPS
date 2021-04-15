@@ -18,6 +18,13 @@ class _VisualizeParkingState extends State<VisualizeParking> {
   int _rating;
   String _coment;
   var parking;
+  DocumentSnapshot parkingLot;
+
+  @override
+  void initState() {
+    parking = Queries().parkingLotById(value);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +43,7 @@ class _VisualizeParkingState extends State<VisualizeParking> {
               ),
             ),
             StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('parqueaderos')
-                    .doc(value) //ID OF DOCUMENT
-                    .snapshots(),
+                stream: parking,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return new CircularProgressIndicator();
