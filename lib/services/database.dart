@@ -184,65 +184,7 @@ class Queries {
 
       //search by Ranking
       //buenas
-      Future<List<QueryDocumentSnapshot>> ranking() =>
-      FirebaseFirestore.instance.collection('parqueaderos').get()
-          
-          .then((snapshot) async {
-        var docs = snapshot.docs;
-        
-        
-        int j = 0;
-        int mayor;
-        bool primero = true;
-        bool greater = false;
-
-        
-        List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs) {         
-
-            print(double.parse(doc['precio.carro']));
-          
-            if(primero){
-
-              lista.add(doc);
-              primero = false;
-
-            }else{
-
-              j = 0;
-              greater = false;
-
-              for(var doc2 in lista){
-
-                
-
-                if(double.parse(doc['precio.carro']) > double.parse(doc2['precio.carro']) && !greater){
-
-                  greater = true;
-                  mayor = j;
-
-                }
-
-                j++;
-
-              }
-
-              if(greater){
-
-                lista.insert(mayor,doc);
-
-              }
-
-              if(!lista.contains(doc)){
-                lista.add(doc);
-              }
-
-            }
-
-        }
-        return lista;
-      });
-
+     
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
