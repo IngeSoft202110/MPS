@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
+
+import '../services/database.dart';
+import 'displayList.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +13,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  List<QueryDocumentSnapshot> lista;
+  Stream<QuerySnapshot> allDocuments;
+
+  @override
+  void initState() {
+    allDocuments = Queries().allDocuments();
+    super.initState();
+  }
+
+  Future searchRanking()async {
+    lista = await Queries()
+        .ranking();
+                              
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +117,15 @@ class _HomeState extends State<Home> {
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 25, vertical: 10),
-                              child: Text("Ranking"),
+                              child: GestureDetector(
+                                child: Text("Ranking"),
+                              
+                                onTap: () {
+                                
+                                  searchRanking();
+                              
+                                },
+                              ),
                             ),
                           ),
                           Divider(
