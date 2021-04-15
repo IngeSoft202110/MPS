@@ -26,8 +26,16 @@ class _SearchList extends State<SearchList> {
   @override
   void initState() {
     allDocuments = Queries().allDocuments();
-    txt.text = address;
+    myMarker.add(Marker(
+        markerId: MarkerId("punto"),
+        position: (LatLng(4.6097100, -74.0817500))));
     super.initState();
+  }
+
+  Future transform(String addr) async {
+    if (addr != "")
+      locations =
+          await Queries().locationFromAddress(addr + ", Bogota, Colombia");
   }
 
   Future search(String addr) async {
@@ -48,9 +56,8 @@ class _SearchList extends State<SearchList> {
 
   Future change(double lat, double long) async {
     List<Placemark> temp = await Queries().addressFromCoordinates(lat, long);
-    setState(() {
-      address = temp.first.street;
-    });
+    address = temp.first.street;
+    txt.text = address;
   }
 
   @override
@@ -132,12 +139,12 @@ class _SearchList extends State<SearchList> {
   }
 
   handle_Tap(LatLng tappedPoint) {
+    change(tappedPoint.latitude, tappedPoint.longitude);
     setState(() {
       myMarker = [];
       myMarker.add(Marker(
           markerId: MarkerId(tappedPoint.toString()), position: tappedPoint));
-      change(tappedPoint.latitude, tappedPoint.longitude);
-      txt.text = address;
+
       error = "";
     });
   }
