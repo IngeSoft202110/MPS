@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
+import 'package:mps/models/rating.dart';
 
 class VisualizeParking extends StatefulWidget {
   final String value;
@@ -14,6 +15,8 @@ class VisualizeParking extends StatefulWidget {
 class _VisualizeParkingState extends State<VisualizeParking> {
   String value;
   _VisualizeParkingState({this.value});
+  int _rating;
+  String _coment;
   var parking;
 
   @override
@@ -139,21 +142,53 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Text(parking["direccion"]),
                         ],
                       ),
-                      Row(
+                      Column(
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 0),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  hintText: "Escriba su comentario aquí",
+                                  labelText: "Comentar",
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          ),
+                          Text("Puntuar",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Rating((rating) {
+                            setState(() {
+                              _rating = rating;
+                            });
+                          }),
+                          SizedBox(
+                              height: 44,
+                              child: _rating != null && _rating > 0
+                                  ? Text("Has puntuado $_rating ",
+                                      style: TextStyle(fontSize: 15))
+                                  : SizedBox.shrink()),
+                          TextButton(
+                              child: Text("Publicar",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15)),
+                              onPressed: () {
+                                //TODO Guarda en la base de datos el comentario entero
+                              }),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
                             child: Text("Comentarios: ",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 )),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
                           for (var i in parking["comentarios"])
                             Row(
                               children: [
