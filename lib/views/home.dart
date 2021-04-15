@@ -5,6 +5,7 @@ import 'package:mps/services/database.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
 
+import '../services/database.dart';
 import 'displayList.dart';
 
 class Home extends StatefulWidget {
@@ -13,9 +14,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
-  //lol
+
   @override
   void initState() {
     allDocuments = Queries().allDocuments();
@@ -44,6 +46,7 @@ class _HomeState extends State<Home> {
     MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
   
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
