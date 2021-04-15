@@ -5,6 +5,7 @@ import 'package:mps/views/displayList.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:mps/views/home.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //Search parking lot nearby
 class SearchList extends StatefulWidget {
@@ -17,12 +18,24 @@ class _SearchList extends State<SearchList> {
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
   List<Location> locations;
-  String address, latitude, longitude, error = "____";
+  var txt = TextEditingController();
+  String address = "", latitude, longitude, error = "";
+  static const _initialPosition = LatLng(4.6097100, -74.0817500);
+  List<Marker> myMarker = [];
 
   @override
   void initState() {
     allDocuments = Queries().allDocuments();
+    myMarker.add(Marker(
+        markerId: MarkerId("punto"),
+        position: (LatLng(4.6097100, -74.0817500))));
     super.initState();
+  }
+
+  Future transform(String addr) async {
+    if (addr != "")
+      locations =
+          await Queries().locationFromAddress(addr + ", Bogota, Colombia");
   }
 
   Future search(String addr) async {
@@ -39,6 +52,12 @@ class _SearchList extends State<SearchList> {
         error = "No hubo resultados para la búsqueda";
       });
     }
+  }
+
+  Future change(double lat, double long) async {
+    List<Placemark> temp = await Queries().addressFromCoordinates(lat, long);
+    address = temp.first.street;
+    txt.text = address;
   }
 
   @override
@@ -64,16 +83,18 @@ class _SearchList extends State<SearchList> {
               ),
               Text("Buscar por cercanía",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              //Spacer(),
               TextFormField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Dirección destino'),
+                controller: txt,
                 onChanged: (val) {
                   address = val;
                 },
+                onTap: () {
+                  error = "";
+                },
               ),
-              //Spacer(),
               new GestureDetector(
                 onTap: () {
                   if (address != null) {
@@ -100,10 +121,31 @@ class _SearchList extends State<SearchList> {
                 ),
               ),
               Text(error),
-
-              //Spacer(),
+              SizedBox(
+                  width: MediaQuery.of(context)
+                      .size
+                      .width, // or use fixed size like 200
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition:
+                        CameraPosition(target: _initialPosition, zoom: 11),
+                    markers: Set.from(myMarker),
+                    onTap: handle_Tap,
+                  ))
             ],
           ),
         ));
+  }
+
+  handle_Tap(LatLng tappedPoint) {
+    change(tappedPoint.latitude, tappedPoint.longitude);
+    setState(() {
+      myMarker = [];
+      myMarker.add(Marker(
+          markerId: MarkerId(tappedPoint.toString()), position: tappedPoint));
+
+      error = "";
+    });
   }
 }

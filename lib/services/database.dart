@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
@@ -28,6 +29,10 @@ class Queries {
         localeIdentifier: localeIdentifier,
       );
 
+  //Transform coordinates into address
+  Future<List<Placemark>> addressFromCoordinates(double lat, double long) =>
+      placemarkFromCoordinates(lat, long);
+
   //Nearby places
   Future<List<QueryDocumentSnapshot>> nearby(
           double latitude, double longitud) =>
@@ -53,7 +58,138 @@ class Queries {
         }
         return lista;
       });
+      //busqueda por Ranking
+      Future<List<QueryDocumentSnapshot>> ranking() =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+          
+          .then((snapshot) async {
+        var docs = snapshot.docs;
+        
+        
+        int j = 0;
+        int mayor;
+        bool primero = true;
+        bool greater = false;
 
+        
+        List<QueryDocumentSnapshot> lista = [];
+        for (var doc in docs) {         
+          
+            if(primero){
+
+              lista.add(doc);
+              primero = false;
+
+            }else{
+
+              j = 0;
+              greater = false;
+
+              for(var doc2 in lista){
+
+                if(doc['puntaje'] > doc2['puntaje'] && !greater){
+
+                  greater = true;
+                  mayor = j;
+
+                }
+
+                j++;
+
+              }
+
+              if(greater){
+
+                lista.insert(mayor,doc);
+
+              }
+
+              if(!lista.contains(doc)){
+                lista.add(doc);
+              }
+
+            }
+
+        }
+        return lista;
+      });
+
+      //busqueda por Precio
+
+      Future<List<QueryDocumentSnapshot>> priceCar() =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+        .then((snapshot) async {
+        var docs = snapshot.docs;
+        int j = 0;
+        int mayor;
+        bool primero = true;
+        bool greater = false;
+        List<QueryDocumentSnapshot> lista = [];
+        for (var doc in docs){
+          double.parse(doc['precio.carro']);
+          if(primero){
+            lista.add(doc);
+            primero = false;
+          }else{
+            j = 0;
+            greater = false;
+            for(var doc2 in lista){
+              if(double.parse(doc['precio.carro']) > double.parse(doc2['precio.carro'])){
+                greater = true;
+                mayor = j;
+                }
+                j++;
+              }
+              if(greater){
+                lista.insert(mayor,doc);
+              }
+              if(!lista.contains(doc)){
+                lista.add(doc);
+              }
+            }
+        }
+        return lista;
+      });
+
+      Future<List<QueryDocumentSnapshot>> pricemMotorcycle() =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+        .then((snapshot) async {
+        var docs = snapshot.docs;
+        int j = 0;
+        int mayor;
+        bool primero = true;
+        bool greater = false;
+        List<QueryDocumentSnapshot> lista = [];
+        for (var doc in docs){
+          double.parse(doc['precio.moto']);
+          if(primero){
+            lista.add(doc);
+            primero = false;
+          }else{
+            j = 0;
+            greater = false;
+            for(var doc2 in lista){
+              if(double.parse(doc['precio.moto']) > double.parse(doc2['precio.moto'])){
+                greater = true;
+                mayor = j;
+                }
+                j++;
+              }
+              if(greater){
+                lista.insert(mayor,doc);
+              }
+              if(!lista.contains(doc)){
+                lista.add(doc);
+              }
+            }
+        }
+        return lista;
+      });
+
+
+      //search by Ranking
+      //buenas
+     
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
