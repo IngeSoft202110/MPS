@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
-
+  //lol
   @override
   void initState() {
     allDocuments = Queries().allDocuments();
