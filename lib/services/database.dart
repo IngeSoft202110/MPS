@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
@@ -27,6 +28,10 @@ class Queries {
         address,
         localeIdentifier: localeIdentifier,
       );
+
+  //Transform coordinates into address
+  Future<List<Placemark>> addressFromCoordinates(double lat, double long) =>
+      placemarkFromCoordinates(lat, long);
 
   //Nearby places
   Future<List<QueryDocumentSnapshot>> nearby(

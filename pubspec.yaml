@@ -22,7 +22,9 @@ dependencies:
   random_string:
   cloud_firestore:
   geocoding:
-  geolocator:
+  geolocator: ^7.0.3
+  google_maps_webservice:
+  http:
 
 
   flutter_polyline_points:
@@ -30,6 +32,7 @@ dependencies:
   rxdart: any
   geoflutterfire:
   location:
+  uuid: 3.0.4
 
   cupertino_icons: ^1.0.2
 
