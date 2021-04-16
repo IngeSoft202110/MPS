@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
@@ -58,138 +59,128 @@ class Queries {
         }
         return lista;
       });
-      //busqueda por Ranking
-      Future<List<QueryDocumentSnapshot>> ranking() =>
-      FirebaseFirestore.instance.collection('parqueaderos').get()
-          
+  //busqueda por Ranking
+  Future<List<QueryDocumentSnapshot>> ranking() => FirebaseFirestore.instance
+          .collection('parqueaderos')
+          .get()
           .then((snapshot) async {
         var docs = snapshot.docs;
-        
-        
+
         int j = 0;
         int menor;
         bool primero = true;
         bool greater = false;
 
-        
         List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs) {         
-          
-            if(primero){
+        for (var doc in docs) {
+          if (primero) {
+            lista.add(doc);
+            primero = false;
+          } else {
+            j = 0;
+            greater = false;
 
+            for (var doc2 in lista) {
+              if (doc['puntaje'] > doc2['puntaje'] && !greater) {
+                greater = true;
+                menor = j;
+              }
+
+              j++;
+            }
+
+            if (greater) {
+              lista.insert(menor, doc);
+            }
+
+            if (!lista.contains(doc)) {
               lista.add(doc);
-              primero = false;
-
-            }else{
-
-              j = 0;
-              greater = false;
-
-              for(var doc2 in lista){
-
-                if(doc['puntaje'] > doc2['puntaje'] && !greater){
-
-                  greater = true;
-                  menor = j;
-
-                }
-
-                j++;
-
-              }
-
-              if(greater){
-
-                lista.insert(menor,doc);
-
-              }
-
-              if(!lista.contains(doc)){
-                lista.add(doc);
-              }
-
             }
-
+          }
         }
         return lista;
       });
 
-      //busqueda por Precio
+  //busqueda por Precio
 
-      Future<List<QueryDocumentSnapshot>> priceCar() =>
-      FirebaseFirestore.instance.collection('parqueaderos').get()
-        .then((snapshot) async {
+  Future<List<QueryDocumentSnapshot>> priceCar() => FirebaseFirestore.instance
+          .collection('parqueaderos')
+          .get()
+          .then((snapshot) async {
         var docs = snapshot.docs;
         int j = 0;
         int menor;
         bool primero = true;
         bool greater = false;
         List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs){
+        for (var doc in docs) {
           double.parse(doc['precio.carro']);
-          if(primero){
+          if (primero) {
             lista.add(doc);
             primero = false;
-          }else{
+          } else {
             j = 0;
             greater = false;
-            for(var doc2 in lista){
-              if(double.parse(doc['precio.carro']) < double.parse(doc2['precio.carro'])){
+            for (var doc2 in lista) {
+              if (double.parse(doc['precio.carro']) <
+                  double.parse(doc2['precio.carro'])) {
                 greater = true;
                 menor = j;
-                }
-                j++;
               }
-              if(greater){
-                lista.insert(menor,doc);
-              }
-              if(!lista.contains(doc)){
-                lista.add(doc);
-              }
+              j++;
             }
+            if (greater) {
+              lista.insert(menor, doc);
+            }
+            if (!lista.contains(doc)) {
+              lista.add(doc);
+            }
+          }
         }
         return lista;
       });
 
-      Future<List<QueryDocumentSnapshot>> pricemMotorcycle() =>
-      FirebaseFirestore.instance.collection('parqueaderos').get()
-        .then((snapshot) async {
+  Future<List<QueryDocumentSnapshot>> pricemMotorcycle() =>
+      FirebaseFirestore.instance
+          .collection('parqueaderos')
+          .get()
+          .then((snapshot) async {
         var docs = snapshot.docs;
         int j = 0;
         int menor;
         bool primero = true;
         bool greater = false;
         List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs){
+        for (var doc in docs) {
           double.parse(doc['precio.moto']);
-          if(primero){
+          if (primero) {
             lista.add(doc);
             primero = false;
-          }else{
+          } else {
             j = 0;
             greater = false;
-            for(var doc2 in lista){
-              if(double.parse(doc['precio.moto']) < double.parse(doc2['precio.moto'])){
+            for (var doc2 in lista) {
+              if (double.parse(doc['precio.moto']) <
+                  double.parse(doc2['precio.moto'])) {
                 greater = true;
                 menor = j;
-                }
-                j++;
               }
-              if(greater){
-                lista.insert(menor,doc);
-              }
-              if(!lista.contains(doc)){
-                lista.add(doc);
-              }
+              j++;
             }
+            if (greater) {
+              lista.insert(menor, doc);
+            }
+            if (!lista.contains(doc)) {
+              lista.add(doc);
+            }
+          }
         }
         return lista;
       });
 
+  //search by Ranking
+  //buenas
 
-      //search by Ranking
-      //buenas
-     
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
@@ -200,4 +191,28 @@ class Queries {
   //Return specific parking by id
   Stream<DocumentSnapshot> parkingLotById(String id) =>
       FirebaseFirestore.instance.collection("parqueaderos").doc(id).snapshots();
+}
+
+void modifyComment(String value, Map data) async {
+  final snapShot = await FirebaseFirestore.instance
+      .collection('parqueaderos')
+      .doc(value)
+      .get();
+  data.update('usuario', (value) => getNameUser());
+
+  List comentarios = snapShot['comentarios'];
+  comentarios.add(data);
+  print(comentarios);
+
+  final newData = await FirebaseFirestore.instance
+      .collection('parqueaderos')
+      .doc(value)
+      .update({"comentarios": FieldValue.arrayUnion(comentarios)});
+}
+
+String getNameUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userName = auth.currentUser.email.replaceAll("@gmail.com", "");
+  print(userName);
+  return userName;
 }

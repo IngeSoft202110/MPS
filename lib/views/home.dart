@@ -5,6 +5,7 @@ import 'package:mps/services/database.dart';
 import 'package:mps/views/searchButton.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
+import 'package:mps/views/mainpageuser.dart';
 
 import '../services/database.dart';
 import 'displayList.dart';
@@ -15,7 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
 
@@ -25,28 +25,26 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future searchRanking()async {
-    lista = await Queries()
-        .ranking();
-                              
+  Future searchRanking() async {
+    lista = await Queries().ranking();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  Future searchPriceCar()async {
-    lista = await Queries()
-        .priceCar();
-                              
+
+  Future searchPriceCar() async {
+    lista = await Queries().priceCar();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  Future searchPriceMot()async {
-    lista = await Queries()
-        .pricemMotorcycle();
-                              
+
+  Future searchPriceMot() async {
+    lista = await Queries().pricemMotorcycle();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -119,36 +117,33 @@ class _HomeState extends State<Home> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            child: GestureDetector(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 10),
+                              child: GestureDetector(
                                 child: Text("Precio"),
                                 onTap: () {
                                   Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchButton()));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchButton()));
                                 },
-                            )
-                          ),
+                              )),
                         ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                         Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10), 
-                              child: GestureDetector(
-                                child: Text("Ranking"),
-                              
-                                onTap: () {
-                                
-                                  searchRanking();
-                              
-                                },
-                              ),
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            child: GestureDetector(
+                              child: Text("Ranking"),
+                              onTap: () {
+                                searchRanking();
+                              },
                             ),
                           ),
+                        ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                       ],
                     ),
