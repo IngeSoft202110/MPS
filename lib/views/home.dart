@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
+import 'package:mps/views/searchButton.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
 
@@ -121,35 +122,12 @@ class _HomeState extends State<Home> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),
                             child: GestureDetector(
-                                child: Text("Price"),
+                                child: Text("Precio"),
                                 onTap: () {
-                                  //lol
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25, vertical: 10),
-                                      child: GestureDetector(
-                                          child: Text("Price CAR"),
-                                          onTap: () {
-                                            searchPriceCar();
-                                          }
-                                        ),
-                                      ),
-                                  );
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25, vertical: 10),
-                                      child: GestureDetector(
-                                          child: Text("Price Motorcycle"),
-                                          onTap: () {
-                                            searchPriceMot();
-                                          }
-                                        ),
-                                      ),
-                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SearchButton()));
                                 },
                             )
                           ),
