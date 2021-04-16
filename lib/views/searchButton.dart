@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mps/services/database.dart';
 
 import 'displayList.dart';
+import 'home.dart';
 
 class SearchButton extends StatefulWidget {
   @override
@@ -37,9 +38,34 @@ class _SearchButton extends State<SearchButton> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      appBar: AppBar(
+
+        leading: IconButton(
+
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+
+          onPressed: () => Navigator.pushReplacement(
+
+              context, MaterialPageRoute(builder: (context) => Home())),
+
+        ),
+
+        backgroundColor: Colors.blue[900],
+
+        title: Text("Filtro de busquea"),
+
+      ),
+      
+      body: 
+      Container(
         child: Column(
           children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 30),
+              child: Center(
+                child: Image(image: AssetImage('assets/Logo_Acron.png')),
+              ),
+            ),
             Container(
               color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
