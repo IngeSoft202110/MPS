@@ -7,28 +7,40 @@ import 'package:mps/services/google_maps_requests.dart';
 import 'package:uuid/uuid.dart';
 
 class ShowRoute extends StatefulWidget {
+  final String value;
+  ShowRoute({Key key, @required this.value}) : super(key: key);
+
   @override
-  _ShowRoute createState() => _ShowRoute();
+  _ShowRoute createState() => _ShowRoute(value: value);
 }
 
 class _ShowRoute extends State<ShowRoute> {
+  String value;
+  _ShowRoute({this.value});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue[900],
-          title: Text("Managing Parking System"),
+          title: Text(value),
         ),
-        body: Map());
+        body: Map(value: value));
   }
 }
 
 class Map extends StatefulWidget {
+  final String value;
+  Map({Key key, @required this.value}) : super(key: key);
+
   @override
-  _MapState createState() => _MapState();
+  _MapState createState() => _MapState(value: value);
 }
 
 class _MapState extends State<Map> {
+  String value;
+  _MapState({this.value});
+
   GoogleMapController mapController;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
   TextEditingController locationController = TextEditingController();
@@ -41,7 +53,7 @@ class _MapState extends State<Map> {
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
+    _getUserLocation(value);
   }
 
   @override
@@ -66,61 +78,6 @@ class _MapState extends State<Map> {
                 onCameraMove: _onCameraMove,
                 polylines: _polyLines,
               ),
-
-              // Positioned(
-              //   top: 105.0,
-              //   right: 15.0,
-              //   left: 15.0,
-              //   child: Container(
-              //     height: 50.0,
-              //     width: double.infinity,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(3.0),
-              //       color: Colors.white,
-              //       boxShadow: [
-              //         BoxShadow(
-              //             color: Colors.grey,
-              //             offset: Offset(1.0, 5.0),
-              //             blurRadius: 10,
-              //             spreadRadius: 3)
-              //       ],
-              //     ),
-              //     child: TextField(
-              //       cursorColor: Colors.black,
-              //       textInputAction: TextInputAction.go,
-              //       onSubmitted: (value) {
-              //         sendRequest(value);
-              //       },
-              //       decoration: InputDecoration(
-              //         icon: Container(
-              //           margin: EdgeInsets.only(left: 20, top: 5),
-              //           width: 10,
-              //           height: 10,
-              //           child: Icon(
-              //             Icons.local_taxi,
-              //             color: Colors.black,
-              //           ),
-              //         ),
-              //         hintText: "destination?",
-              //         border: InputBorder.none,
-              //         contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Positioned(
-              //   top: 40,
-              //   right: 10,
-              //   child: FloatingActionButton(
-              //     onPressed: _onAddMarkerPressed,
-              //     tooltip: "Añadir marcador",
-              //     backgroundColor: Colors.black,
-              //     child: Icon(
-              //       Icons.add_location,
-              //       color: Colors.white,
-              //     ),
-              //   ),
-              // )
             ],
           );
   }
@@ -152,9 +109,6 @@ class _MapState extends State<Map> {
 
   void createRoute(String encondedPoly) {
     setState(() {
-      print("puntos:");
-      print(_convertToLatLng(_decodePoly(encondedPoly)));
-
       _polyLines.add(Polyline(
           polylineId: PolylineId(_lastPosition.toString()),
           width: 2,
@@ -203,12 +157,10 @@ class _MapState extends State<Map> {
     /*adding to previous value as done in encoding */
     for (var i = 2; i < lList.length; i++) lList[i] += lList[i - 2];
 
-    print(lList.toString());
-
     return lList;
   }
 
-  void _getUserLocation() async {
+  void _getUserLocation(String destine) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -238,7 +190,7 @@ class _MapState extends State<Map> {
     setState(() {
       _initialPosition = LatLng(position.latitude, position.longitude);
       locationController.text = placemark[0].name;
-      sendRequest("carrera 7 # 45");
+      sendRequest(destine);
     });
   }
 
@@ -255,9 +207,6 @@ class _MapState extends State<Map> {
     LatLng destination = LatLng(latitude, longitude);
     _addMarker(_initialPosition, intendedLocation);
     _addMarker(destination, intendedLocation);
-
-    print("estoy en: ");
-    print(_initialPosition);
 
     String route = await _googleMapsServices.getRouteCoordinates(
         _initialPosition, destination);
