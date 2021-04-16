@@ -62,7 +62,19 @@ class _HomeState extends State<Home> {
             },
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
+                child: Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.account_circle),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPageUser()));
+                        }),
+                    Icon(Icons.exit_to_app),
+                  ],
+                )),
           )
         ],
       ),
