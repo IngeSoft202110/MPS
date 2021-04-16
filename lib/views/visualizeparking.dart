@@ -250,7 +250,9 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ShowRoute()));
+                                        builder: (context) => ShowRoute(
+                                            value: parking["direccion"]
+                                                .toString())));
                               },
                             ),
                           ),
