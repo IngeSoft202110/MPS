@@ -55,7 +55,6 @@ class _SearchButton extends State<SearchButton> {
         title: Text("Filtro de busquea"),
 
       ),
-      
       body: 
       Container(
         child: Column(

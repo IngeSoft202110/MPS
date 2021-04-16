@@ -67,7 +67,7 @@ class Queries {
         
         
         int j = 0;
-        int mayor;
+        int menor;
         bool primero = true;
         bool greater = false;
 
@@ -90,7 +90,7 @@ class Queries {
                 if(doc['puntaje'] > doc2['puntaje'] && !greater){
 
                   greater = true;
-                  mayor = j;
+                  menor = j;
 
                 }
 
@@ -100,7 +100,7 @@ class Queries {
 
               if(greater){
 
-                lista.insert(mayor,doc);
+                lista.insert(menor,doc);
 
               }
 
@@ -121,7 +121,7 @@ class Queries {
         .then((snapshot) async {
         var docs = snapshot.docs;
         int j = 0;
-        int mayor;
+        int menor;
         bool primero = true;
         bool greater = false;
         List<QueryDocumentSnapshot> lista = [];
@@ -134,14 +134,14 @@ class Queries {
             j = 0;
             greater = false;
             for(var doc2 in lista){
-              if(double.parse(doc['precio.carro']) > double.parse(doc2['precio.carro'])){
+              if(double.parse(doc['precio.carro']) < double.parse(doc2['precio.carro'])){
                 greater = true;
-                mayor = j;
+                menor = j;
                 }
                 j++;
               }
               if(greater){
-                lista.insert(mayor,doc);
+                lista.insert(menor,doc);
               }
               if(!lista.contains(doc)){
                 lista.add(doc);
@@ -156,7 +156,7 @@ class Queries {
         .then((snapshot) async {
         var docs = snapshot.docs;
         int j = 0;
-        int mayor;
+        int menor;
         bool primero = true;
         bool greater = false;
         List<QueryDocumentSnapshot> lista = [];
@@ -169,14 +169,14 @@ class Queries {
             j = 0;
             greater = false;
             for(var doc2 in lista){
-              if(double.parse(doc['precio.moto']) > double.parse(doc2['precio.moto'])){
+              if(double.parse(doc['precio.moto']) < double.parse(doc2['precio.moto'])){
                 greater = true;
-                mayor = j;
+                menor = j;
                 }
                 j++;
               }
               if(greater){
-                lista.insert(mayor,doc);
+                lista.insert(menor,doc);
               }
               if(!lista.contains(doc)){
                 lista.add(doc);
