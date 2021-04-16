@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
 import 'package:mps/models/rating.dart';
@@ -18,7 +19,6 @@ class _VisualizeParkingState extends State<VisualizeParking> {
   int _rating;
   String _coment;
   var parking;
-  DocumentSnapshot parkingLot;
 
   @override
   void initState() {
@@ -160,6 +160,9 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                     fontSize: 15,
                                     color: Colors.black,
                                   )),
+                              onChanged: (val) {
+                                _coment = val;
+                              },
                             ),
                           ),
                           Text("Puntuar",
@@ -167,6 +170,8 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Rating((rating) {
                             setState(() {
                               _rating = rating;
+                              parking = Queries().parkingLotById(
+                                  value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
                             });
                           }),
                           SizedBox(
@@ -182,7 +187,14 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15)),
                               onPressed: () {
-                                //TODO Guarda en la base de datos el comentario entero
+                                var comentario = {
+                                  'comentario': _coment,
+                                  'estrellas': _rating.toString(),
+                                  'usuario': ''
+                                };
+                                modifyComment(value, comentario);
+                                parking = Queries().parkingLotById(
+                                    value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
                               }),
                           Padding(
                             padding: EdgeInsets.symmetric(

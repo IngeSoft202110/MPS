@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
+import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/signin.dart';
 import 'package:mps/views/searchList.dart';
 
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   List<QueryDocumentSnapshot> lista;
   Stream<QuerySnapshot> allDocuments;
 
@@ -24,28 +24,26 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future searchRanking()async {
-    lista = await Queries()
-        .ranking();
-                              
+  Future searchRanking() async {
+    lista = await Queries().ranking();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  Future searchPriceCar()async {
-    lista = await Queries()
-        .priceCar();
-                              
+
+  Future searchPriceCar() async {
+    lista = await Queries().priceCar();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  Future searchPriceMot()async {
-    lista = await Queries()
-        .pricemMotorcycle();
-                              
+
+  Future searchPriceMot() async {
+    lista = await Queries().pricemMotorcycle();
+
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
+        MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +60,22 @@ class _HomeState extends State<Home> {
               });
             },
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
-          )
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.account_circle),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPageUser()));
+                      }),
+                  Icon(Icons.exit_to_app)
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       body: Container(
@@ -104,7 +115,7 @@ class _HomeState extends State<Home> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),
                             child: GestureDetector(
-                              child: Text("Cercanía"),
+                              child: Text("Near by"),
                               onTap: () {
                                 Navigator.pushReplacement(
                                     context,
@@ -118,9 +129,9 @@ class _HomeState extends State<Home> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            child: GestureDetector(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 10),
+                              child: GestureDetector(
                                 child: Text("Price"),
                                 onTap: () {
                                   //lol
@@ -133,9 +144,8 @@ class _HomeState extends State<Home> {
                                           child: Text("Price CAR"),
                                           onTap: () {
                                             searchPriceCar();
-                                          }
-                                        ),
-                                      ),
+                                          }),
+                                    ),
                                   );
                                   Align(
                                     alignment: Alignment.centerLeft,
@@ -146,31 +156,26 @@ class _HomeState extends State<Home> {
                                           child: Text("Price Motorcycle"),
                                           onTap: () {
                                             searchPriceMot();
-                                          }
-                                        ),
-                                      ),
+                                          }),
+                                    ),
                                   );
                                 },
-                            )
-                          ),
+                              )),
                         ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                         Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10), 
-                              child: GestureDetector(
-                                child: Text("Ranking"),
-                              
-                                onTap: () {
-                                
-                                  searchRanking();
-                              
-                                },
-                              ),
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            child: GestureDetector(
+                              child: Text("Ranking"),
+                              onTap: () {
+                                searchRanking();
+                              },
                             ),
                           ),
+                        ),
                         Divider(color: Colors.black, indent: 19, endIndent: 19),
                       ],
                     ),
