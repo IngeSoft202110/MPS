@@ -21,7 +21,7 @@ class _Map extends State<Map> {
 
   static const _initialPosition = LatLng(4.6097100, -74.0817500);
   String address = "", latitude, longitude, error = "";
-  List<Marker> myMarker = [];
+  List<Marker> myMarker;
   List<Circle> myCircle = [];
   List<Location> locations;
   List<QueryDocumentSnapshot> lista;
@@ -66,7 +66,9 @@ class _Map extends State<Map> {
         loc = [];
         loc =
             await Queries().locationFromAddress(course['direccion'].toString());
-        markers(LatLng(loc.first.latitude, loc.first.longitude));
+        setState(() {
+          markers(LatLng(loc.first.latitude, loc.first.longitude));
+        });
       }
     }
   }
@@ -172,11 +174,15 @@ class _Map extends State<Map> {
 
   void addMarker(LatLng latLng) {
     myMarker = [];
-    myMarker
-        .add(Marker(markerId: MarkerId(latLng.toString()), position: latLng));
+    myMarker.add(Marker(
+      markerId: MarkerId(latLng.toString()),
+      position: latLng,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+    ));
   }
 
   void markers(LatLng latsLongs) {
+    print(latsLongs);
     myMarker.add(
       Marker(
         markerId: MarkerId(latsLongs.toString()),
