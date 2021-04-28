@@ -53,7 +53,7 @@ class Queries {
               coordenadas.first.latitude,
               coordenadas.first.longitude);
           print(distanceInMeters);
-          if (distanceInMeters <= 4000) {
+          if (distanceInMeters <= 1000) {
             lista.add(doc);
           }
         }

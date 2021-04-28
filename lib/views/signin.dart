@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
+import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/signup.dart';
 import 'package:mps/views/home.dart';
 
@@ -29,7 +30,7 @@ class _SignInState extends State<SignIn> {
           //aassas
 
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => HomeClient()));
         }
       });
     }

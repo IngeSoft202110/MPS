@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
+import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/signin.dart';
 
 import 'home.dart';
@@ -26,7 +27,7 @@ class _SignUpState extends State<SignUp> {
             _isLoading = false;
           });
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => HomeClient()));
         }
       });
     }

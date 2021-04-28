@@ -21,15 +21,14 @@ class _Map extends State<Map> {
 
   static const _initialPosition = LatLng(4.6097100, -74.0817500);
   String address = "", latitude, longitude, error = "";
-  List<Marker> myMarker;
+  List<Marker> myMarker = [];
   List<Circle> myCircle = [];
   List<Location> locations;
   List<QueryDocumentSnapshot> lista;
 
   @override
   void initState() {
-    myMarker
-        .add(Marker(markerId: MarkerId("punto"), position: (_initialPosition)));
+    addMarker(_initialPosition);
     circles(_initialPosition);
     controller = GoogleMapsController(
       initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 15),
