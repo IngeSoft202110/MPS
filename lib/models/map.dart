@@ -5,17 +5,17 @@ import 'package:geocoding/geocoding.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
-import 'package:mps/views/displayList.dart';
-import 'package:mps/views/homeClient.dart';
 
 class Map extends StatefulWidget {
-  final Function(int) callMap;
-  Map(this.callMap);
+  final Function(List<QueryDocumentSnapshot>) onListUpdated;
+  Map(this.onListUpdated);
+
   @override
   _Map createState() => _Map();
 }
 
 class _Map extends State<Map> {
+  List<QueryDocumentSnapshot> lista;
   var txt = TextEditingController();
   GoogleMapsController controller;
 
@@ -24,7 +24,6 @@ class _Map extends State<Map> {
   List<Marker> myMarker = [];
   List<Circle> myCircle = [];
   List<Location> locations;
-  List<QueryDocumentSnapshot> lista;
 
   @override
   void initState() {
@@ -54,6 +53,7 @@ class _Map extends State<Map> {
       circles(LatLng(locations.first.latitude, locations.first.longitude));
       controller.zoomTo(50);
     });
+    this.widget.onListUpdated(lista);
   }
 
   Future nearParking(LatLng latLng) async {
@@ -81,10 +81,7 @@ class _Map extends State<Map> {
     return new Column(
       children: [
         buildAddressBar(),
-        Stack(children: [
-          googleMapView(),
-          buttons(),
-        ])
+        googleMapView(),
       ],
     );
   }
@@ -169,6 +166,7 @@ class _Map extends State<Map> {
       addMarker(tappedPoint);
       circles(tappedPoint);
     });
+    this.widget.onListUpdated(lista);
   }
 
   void addMarker(LatLng latLng) {
@@ -186,60 +184,6 @@ class _Map extends State<Map> {
       Marker(
         markerId: MarkerId(latsLongs.toString()),
         position: latsLongs,
-      ),
-    );
-  }
-
-  //Lateral buttons of the map
-  Widget buttons() {
-    return new Column(
-      children: [
-        Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: button('assets/Price.png'),
-        ),
-        button('assets/Ranking.png'),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: GestureDetector(
-            child: button('assets/List.png'),
-            onTap: () {
-              if (lista.isNotEmpty) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DisplayList(lista: lista)));
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (context) => ErrorDialog(
-                        "Error", "No hay parqueaderos en la zona seleccionada"),
-                    barrierDismissible: true);
-                print("error");
-              }
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget button(String image) {
-    return Container(
-      height: 70,
-      width: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.blue[900],
-          width: 5,
-        ),
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.scaleDown,
-        ),
       ),
     );
   }
