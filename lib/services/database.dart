@@ -65,39 +65,9 @@ class Queries {
           .get()
           .then((snapshot) async {
         var docs = snapshot.docs;
-
-        int j = 0;
-        int menor;
-        bool primero = true;
-        bool greater = false;
-
         List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs) {
-          if (primero) {
-            lista.add(doc);
-            primero = false;
-          } else {
-            j = 0;
-            greater = false;
+        lista.addAll(docs.where((element) => double.parse(element['puntaje']) < 5.1));
 
-            for (var doc2 in lista) {
-              if (doc['puntaje'] > doc2['puntaje'] && !greater) {
-                greater = true;
-                menor = j;
-              }
-
-              j++;
-            }
-
-            if (greater) {
-              lista.insert(menor, doc);
-            }
-
-            if (!lista.contains(doc)) {
-              lista.add(doc);
-            }
-          }
-        }
         return lista;
       });
 
@@ -108,6 +78,14 @@ class Queries {
           .get()
           .then((snapshot) async {
         var docs = snapshot.docs;
+        List<QueryDocumentSnapshot> lista = [];
+        lista.addAll(docs.where((element) => double.parse(element['precio.carro']) > 5.1));
+        /*
+        var docs3 = snapshot.docs;
+        print("Comenzamos la jugadaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        docs3.forEach((element) {print(element['puntaje']);});
+        var trynew = docs3.where((element) => double.parse(element['puntaje']) < 5.1);
+        trynew.forEach((element) {print(element['puntaje']);});
         int j = 0;
         int menor;
         bool primero = true;
@@ -136,7 +114,7 @@ class Queries {
               lista.add(doc);
             }
           }
-        }
+        }*/
         return lista;
       });
 
@@ -146,7 +124,9 @@ class Queries {
           .get()
           .then((snapshot) async {
         var docs = snapshot.docs;
-        int j = 0;
+        List<QueryDocumentSnapshot> lista = [];
+        lista.addAll(docs.where((element) => double.parse(element['precio.moto']) > 5.1));
+        /*int j = 0;
         int menor;
         bool primero = true;
         bool greater = false;
@@ -174,7 +154,7 @@ class Queries {
               lista.add(doc);
             }
           }
-        }
+        }*/
         return lista;
       });
 
