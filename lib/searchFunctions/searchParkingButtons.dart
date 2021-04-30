@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mps/models/parkingLots.dart';
 import 'package:mps/views/displayList.dart';
 import 'package:mps/views/errorDialog.dart';
+import 'package:mps/views/visualizeparking.dart';
+import 'package:provider/provider.dart';
 
 class SearchParkingButtons extends StatefulWidget {
   final List<QueryDocumentSnapshot> lista;
@@ -21,6 +24,7 @@ class _Buttons extends State<SearchParkingButtons> {
 
   //Lateral buttons of the map
   Widget buttons() {
+    final parkingList = Provider.of<ParkingLots>(context);
     return new Column(
       children: [
         Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 30)),
@@ -29,17 +33,17 @@ class _Buttons extends State<SearchParkingButtons> {
           child: button('assets/Price.png'),
         ),
         button('assets/Ranking.png'),
-        Text(lista.length.toString()),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: GestureDetector(
             child: button('assets/List.png'),
             onTap: () {
-              if (lista.isNotEmpty) {
+              if (parkingList.notNull(parkingList.list)) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => DisplayList(lista: lista)));
+                        builder: (context) =>
+                            DisplayList(lista: parkingList.list)));
               } else {
                 showDialog(
                     context: context,
