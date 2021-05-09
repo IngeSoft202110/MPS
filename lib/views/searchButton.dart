@@ -21,15 +21,13 @@ class _SearchButton extends State<SearchButton> {
     super.initState();
   }
   Future searchPriceCar()async {
-    lista = await Queries()
-        .priceCar();
+    //lista = await Queries().priceCar();
                               
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
   Future searchPriceMot()async {
-    lista = await Queries()
-        .pricemMotorcycle();
+    //lista = await Queries().pricemMotorcycle();
                               
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
