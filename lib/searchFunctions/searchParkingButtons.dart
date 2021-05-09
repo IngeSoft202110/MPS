@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/parkingLots.dart';
+import 'package:mps/searchFunctions/priceDialog.dart';
+import 'package:mps/searchFunctions/rankingDialog.dart';
 import 'package:mps/views/displayList.dart';
 import 'package:mps/views/errorDialog.dart';
 import 'package:mps/views/visualizeparking.dart';
@@ -30,9 +32,19 @@ class _Buttons extends State<SearchParkingButtons> {
         Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 30)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: button('assets/Price.png'),
+          child: GestureDetector(
+              child: button('assets/Price.png'),
+              onTap: () {
+                showDialog(
+                    context: context, builder: (context) => PriceDialog());
+              }),
         ),
-        button('assets/Ranking.png'),
+        GestureDetector(
+          child: button('assets/Ranking.png'),
+          onTap: () {
+            showDialog(context: context, builder: (context) => RankingDialog());
+          },
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: GestureDetector(
