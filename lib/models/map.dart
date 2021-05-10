@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:mps/models/parkingLots.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
+import 'package:provider/provider.dart';
 
 class Map extends StatefulWidget {
   final Function(List<QueryDocumentSnapshot>) onListUpdated;
@@ -20,6 +22,7 @@ class _Map extends State<Map> {
   GoogleMapsController controller;
 
   static const _initialPosition = LatLng(4.6097100, -74.0817500);
+  LatLng posPerson;
   String address = "", latitude, longitude, error = "";
   List<Marker> myMarker = [];
   List<Circle> myCircle = [];
@@ -47,7 +50,7 @@ class _Map extends State<Map> {
         await Queries().locationFromAddress(addr + ", Bogota, Colombia");
     lista = await getList(
         LatLng(locations.first.latitude, locations.first.longitude));
-    nearParking(LatLng(locations.first.latitude, locations.first.longitude));
+    nearParking();
     setState(() {
       addMarker(LatLng(locations.first.latitude, locations.first.longitude));
       circles(LatLng(locations.first.latitude, locations.first.longitude));
@@ -56,7 +59,7 @@ class _Map extends State<Map> {
     this.widget.onListUpdated(lista);
   }
 
-  Future nearParking(LatLng latLng) async {
+  Future nearParking() async {
     List<Location> loc = [];
     DocumentSnapshot course;
     if (lista.isNotEmpty) {
@@ -72,10 +75,29 @@ class _Map extends State<Map> {
     }
   }
 
+  Future updateParking(ParkingLots updatedList) async {
+    List<Location> loc = [];
+    DocumentSnapshot course;
+    if (updatedList.list.isNotEmpty) {
+      for (int i = 0; i < updatedList.list.length; i++) {
+        course = updatedList.list[i];
+        loc = [];
+        loc =
+            await Queries().locationFromAddress(course['direccion'].toString());
+        setState(() {
+          markers(LatLng(loc.first.latitude, loc.first.longitude));
+        });
+      }
+    }
+    updatedList.ranking = false;
+    lista = updatedList.list;
+    this.widget.onListUpdated(updatedList.list);
+  }
+
   Future getList(LatLng latLng) =>
       (Queries().nearby(latLng.latitude, latLng.longitude));
 
-//Te  whole widget that contains the map, ans its buttons
+//The  whole widget that contains the map, ans its buttons
 //
   Widget buildBody() {
     return new Column(
@@ -88,6 +110,14 @@ class _Map extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
+    final parkingList = Provider.of<ParkingLots>(context);
+
+    if (parkingList.ranking != null) {
+      if (parkingList.ranking == true) {
+        addMarker(posPerson);
+        updateParking(parkingList);
+      }
+    }
     return buildBody();
   }
 
@@ -161,8 +191,9 @@ class _Map extends State<Map> {
   handle_Tap(LatLng tappedPoint) async {
     change(tappedPoint.latitude, tappedPoint.longitude);
     lista = await getList(tappedPoint);
-    nearParking(tappedPoint);
+    nearParking();
     setState(() {
+      posPerson = tappedPoint;
       addMarker(tappedPoint);
       circles(tappedPoint);
     });

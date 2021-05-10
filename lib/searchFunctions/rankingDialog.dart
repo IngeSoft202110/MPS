@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/parkingLots.dart';
 import 'package:mps/models/raiting.dart';
+import 'package:mps/services/database.dart';
+import 'package:mps/views/errorDialog.dart';
 import 'package:provider/provider.dart';
 
 class RankingDialog extends StatefulWidget {
@@ -12,6 +15,7 @@ class RankingDialog extends StatefulWidget {
 
 class _RankingDialog extends State<RankingDialog> {
   int _rating;
+  List<QueryDocumentSnapshot> update = [];
   @override
   Widget build(BuildContext context) {
     final parkingList = Provider.of<ParkingLots>(context);
@@ -36,13 +40,36 @@ class _RankingDialog extends State<RankingDialog> {
         content: Rating((rating) {
           setState(() {
             _rating = rating;
-            //Esto hace que se refresque el dibujado de la querie de parqueaderos
           });
         }),
         actions: [
           GestureDetector(
             onTap: () {
+              if (_rating != null) {
+                setState(() {
+                  update = [];
+                  update = Queries().ranking(parkingList.list, _rating);
+                });
+                if (update.isNotEmpty) {
+                  parkingList.list = update;
+                  parkingList.ranking = true;
+                  Navigator.of(context).pop();
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ErrorDialog("Error",
+                          "No hay parqueaderos con esas características"),
+                      barrierDismissible: true);
+                }
+              }
               //hace la busqueda por ranking
+              else {
+                showDialog(
+                    context: context,
+                    builder: (context) =>
+                        ErrorDialog("Error", "Seleccione ranking"),
+                    barrierDismissible: true);
+              }
             },
             child: Container(
               decoration: BoxDecoration(

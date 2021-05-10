@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 //Class used by the provider
 class ParkingLots with ChangeNotifier {
   List<QueryDocumentSnapshot> _list;
+  bool _ranking;
+
+  get ranking {
+    return _ranking;
+  }
+
+  set ranking(bool ranking) {
+    this._ranking = ranking;
+    notifyListeners();
+  }
 
   get list {
     return _list;

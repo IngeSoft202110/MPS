@@ -60,37 +60,35 @@ class Queries {
         return lista;
       });
   //busqueda por Ranking
-   List<QueryDocumentSnapshot> ranking(List<QueryDocumentSnapshot> lista, double puntaje){
-          List<QueryDocumentSnapshot> li=[];
-          li.addAll(lista.where((element) => double.parse(element['puntaje']) > puntaje));
-          
-            return li;
-      }
+  List<QueryDocumentSnapshot> ranking(
+      List<QueryDocumentSnapshot> lista, int puntaje) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(
+        lista.where((element) => (int.parse(element['puntaje'])) == puntaje));
+
+    return li;
+  }
   //busqueda por Precio
 
-    List<QueryDocumentSnapshot> priceCar(List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior){
+  List<QueryDocumentSnapshot> priceCar(
+      List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(lista
+        .where((element) => double.parse(element['precio.carro']) > lInferior)
+        .where((element) => double.parse(element['precio.carro']) < lSuperior));
 
-          List<QueryDocumentSnapshot> li=[];
-          li.addAll(
-            lista.where((element) => double.parse(element['precio.carro']) > lInferior)
-                .where((element) => double.parse(element['precio.carro']) < lSuperior)
-            );
+    return li;
+  }
 
-            return li;
+  List<QueryDocumentSnapshot> pricemMotorcycle(
+      List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(lista
+        .where((element) => double.parse(element['precio.moto']) > lInferior)
+        .where((element) => double.parse(element['precio.moto']) < lSuperior));
 
-      }
-
-  List<QueryDocumentSnapshot> pricemMotorcycle(List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior){
-
-          List<QueryDocumentSnapshot> li=[];
-          li.addAll(
-            lista.where((element) => double.parse(element['precio.moto']) > lInferior)
-                .where((element) => double.parse(element['precio.moto']) < lSuperior)
-            );
-
-            return li;
-
-      }
+    return li;
+  }
 
   //search by Ranking
   //buenas

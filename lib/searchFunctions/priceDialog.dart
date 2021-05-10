@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/parkingLots.dart';
+import 'package:mps/services/database.dart';
+import 'package:mps/views/errorDialog.dart';
 import 'package:provider/provider.dart';
 
 class PriceDialog extends StatefulWidget {
@@ -11,6 +14,7 @@ class PriceDialog extends StatefulWidget {
 
 class _PriceDialog extends State<PriceDialog> {
   int _value;
+  List<QueryDocumentSnapshot> update;
   double minprice = 10;
   double maxprice = 500;
   RangeValues _currentRangeValues = RangeValues(10, 500);
@@ -37,7 +41,44 @@ class _PriceDialog extends State<PriceDialog> {
         actions: [
           GestureDetector(
             onTap: () {
-              //Navigator.of(context).pop();
+              if (_value != null) {
+                if (_value == 1) {
+                  setState(() {
+                    update = [];
+                    double lInferior = _currentRangeValues.start;
+                    double lSuperior = _currentRangeValues.end;
+                    update = Queries().pricemMotorcycle(
+                        parkingList.list, lInferior, lSuperior);
+                  });
+                } else if (_value == 2) {
+                  setState(() {
+                    update = [];
+                    double lInferior = _currentRangeValues.start;
+                    double lSuperior = _currentRangeValues.end;
+                    update = Queries()
+                        .priceCar(parkingList.list, lInferior, lSuperior);
+                  });
+                }
+                if (update.isNotEmpty) {
+                  parkingList.list = update;
+                  parkingList.ranking = true;
+                  Navigator.of(context).pop();
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ErrorDialog("Error",
+                          "No hay parqueaderos con esas características"),
+                      barrierDismissible: true);
+                }
+              }
+              //hace la busqueda por ranking
+              else {
+                showDialog(
+                    context: context,
+                    builder: (context) =>
+                        ErrorDialog("Error", "Seleccione precio y/o tipo"),
+                    barrierDismissible: true);
+              }
             },
             child: Container(
               decoration: BoxDecoration(

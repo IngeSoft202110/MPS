@@ -21,12 +21,12 @@ class _Buttons extends State<SearchParkingButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return buttons();
+    final parkingList = Provider.of<ParkingLots>(context);
+    return buttons(parkingList);
   }
 
   //Lateral buttons of the map
-  Widget buttons() {
-    final parkingList = Provider.of<ParkingLots>(context);
+  Widget buttons(parkingList) {
     return new Column(
       children: [
         Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 30)),
@@ -35,14 +35,31 @@ class _Buttons extends State<SearchParkingButtons> {
           child: GestureDetector(
               child: button('assets/Price.png'),
               onTap: () {
-                showDialog(
-                    context: context, builder: (context) => PriceDialog());
+                if (parkingList.notNull(parkingList.list)) {
+                  showDialog(
+                      context: context, builder: (context) => PriceDialog());
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ErrorDialog("Error",
+                          "No hay parqueaderos en la zona seleccionada"),
+                      barrierDismissible: true);
+                }
               }),
         ),
         GestureDetector(
           child: button('assets/Ranking.png'),
           onTap: () {
-            showDialog(context: context, builder: (context) => RankingDialog());
+            if (parkingList.notNull(parkingList.list)) {
+              showDialog(
+                  context: context, builder: (context) => RankingDialog());
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (context) => ErrorDialog(
+                      "Error", "No hay parqueaderos en la zona seleccionada"),
+                  barrierDismissible: true);
+            }
           },
         ),
         Padding(
