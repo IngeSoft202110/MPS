@@ -5,7 +5,6 @@ import 'package:mps/searchFunctions/priceDialog.dart';
 import 'package:mps/searchFunctions/rankingDialog.dart';
 import 'package:mps/views/displayList.dart';
 import 'package:mps/views/errorDialog.dart';
-import 'package:mps/views/visualizeparking.dart';
 import 'package:provider/provider.dart';
 
 class SearchParkingButtons extends StatefulWidget {
@@ -35,7 +34,8 @@ class _Buttons extends State<SearchParkingButtons> {
           child: GestureDetector(
               child: button('assets/Price.png'),
               onTap: () {
-                if (parkingList.notNull(parkingList.list)) {
+                if ((parkingList.list != null) &&
+                    (parkingList.notNull(parkingList.list))) {
                   showDialog(
                       context: context, builder: (context) => PriceDialog());
                 } else {
@@ -50,7 +50,8 @@ class _Buttons extends State<SearchParkingButtons> {
         GestureDetector(
           child: button('assets/Ranking.png'),
           onTap: () {
-            if (parkingList.notNull(parkingList.list)) {
+            if ((parkingList.list != null) &&
+                (parkingList.notNull(parkingList.list))) {
               showDialog(
                   context: context, builder: (context) => RankingDialog());
             } else {
@@ -67,7 +68,8 @@ class _Buttons extends State<SearchParkingButtons> {
           child: GestureDetector(
             child: button('assets/List.png'),
             onTap: () {
-              if (parkingList.notNull(parkingList.list)) {
+              if ((parkingList.list != null) &&
+                  (parkingList.notNull(parkingList.list))) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
