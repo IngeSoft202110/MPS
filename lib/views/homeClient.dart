@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mps/models/parkingLots.dart';
 import 'package:mps/searchFunctions/searchParkingButtons.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/models/map.dart';
 import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/userLogSign/selectUser.dart';
 import 'package:mps/views/userLogSign/signin.dart';
+import 'package:provider/provider.dart';
 
 List<QueryDocumentSnapshot> list = [];
 
@@ -17,6 +19,8 @@ class HomeClient extends StatefulWidget {
 class _HomeClientState extends State<HomeClient> {
   @override
   Widget build(BuildContext context) {
+    final parkingList = Provider.of<ParkingLots>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
@@ -54,12 +58,11 @@ class _HomeClientState extends State<HomeClient> {
         child: Stack(children: [
           Map((lista) {
             setState(() {
-              list = lista;
+              parkingList.list = lista;
             });
             list = lista;
           }),
-          Text(list.length.toString()),
-          SearchParkingButtons(list),
+          SearchParkingButtons(parkingList.list),
         ]),
       ),
     );

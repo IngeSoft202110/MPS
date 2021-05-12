@@ -67,106 +67,35 @@ class Queries {
         return lista;
       });
   //busqueda por Ranking
-  Future<List<QueryDocumentSnapshot>> ranking() => FirebaseFirestore.instance
-          .collection('parqueaderos')
-          .get()
-          .then((snapshot) async {
-        var docs = snapshot.docs;
-        List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(
-            docs.where((element) => double.parse(element['puntaje']) < 5.1));
+  List<QueryDocumentSnapshot> ranking(
+      List<QueryDocumentSnapshot> lista, int puntaje) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(
+        lista.where((element) => (int.parse(element['puntaje'])) == puntaje));
 
-        return lista;
-      });
-
+    return li;
+  }
   //busqueda por Precio
 
-  Future<List<QueryDocumentSnapshot>> priceCar() => FirebaseFirestore.instance
-          .collection('parqueaderos')
-          .get()
-          .then((snapshot) async {
-        var docs = snapshot.docs;
-        List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs
-            .where((element) => double.parse(element['precio.carro']) > 5.1));
-        /*
-        var docs3 = snapshot.docs;
-        print("Comenzamos la jugadaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        docs3.forEach((element) {print(element['puntaje']);});
-        var trynew = docs3.where((element) => double.parse(element['puntaje']) < 5.1);
-        trynew.forEach((element) {print(element['puntaje']);});
-        int j = 0;
-        int menor;
-        bool primero = true;
-        bool greater = false;
-        List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs) {
-          double.parse(doc['precio.carro']);
-          if (primero) {
-            lista.add(doc);
-            primero = false;
-          } else {
-            j = 0;
-            greater = false;
-            for (var doc2 in lista) {
-              if (double.parse(doc['precio.carro']) <
-                  double.parse(doc2['precio.carro'])) {
-                greater = true;
-                menor = j;
-              }
-              j++;
-            }
-            if (greater) {
-              lista.insert(menor, doc);
-            }
-            if (!lista.contains(doc)) {
-              lista.add(doc);
-            }
-          }
-        }*/
-        return lista;
-      });
+  List<QueryDocumentSnapshot> priceCar(
+      List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(lista
+        .where((element) => double.parse(element['precio.carro']) > lInferior)
+        .where((element) => double.parse(element['precio.carro']) < lSuperior));
 
-  Future<List<QueryDocumentSnapshot>> pricemMotorcycle() =>
-      FirebaseFirestore.instance
-          .collection('parqueaderos')
-          .get()
-          .then((snapshot) async {
-        var docs = snapshot.docs;
-        List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs
-            .where((element) => double.parse(element['precio.moto']) > 5.1));
-        /*int j = 0;
-        int menor;
-        bool primero = true;
-        bool greater = false;
-        List<QueryDocumentSnapshot> lista = [];
-        for (var doc in docs) {
-          double.parse(doc['precio.moto']);
-          if (primero) {
-            lista.add(doc);
-            primero = false;
-          } else {
-            j = 0;
-            greater = false;
-            for (var doc2 in lista) {
-              if (double.parse(doc['precio.moto']) <
-                  double.parse(doc2['precio.moto'])) {
-                greater = true;
-                menor = j;
-              }
-              j++;
-            }
-            if (greater) {
-              lista.insert(menor, doc);
-            }
-            if (!lista.contains(doc)) {
-              lista.add(doc);
-            }
-          }
-        }*/
-        return lista;
-      });
+    return li;
+  }
+
+  List<QueryDocumentSnapshot> pricemMotorcycle(
+      List<QueryDocumentSnapshot> lista, double lInferior, double lSuperior) {
+    List<QueryDocumentSnapshot> li = [];
+    li.addAll(lista
+        .where((element) => double.parse(element['precio.moto']) > lInferior)
+        .where((element) => double.parse(element['precio.moto']) < lSuperior));
+
+    return li;
+  }
 
   //search by Ranking
   //buenas
