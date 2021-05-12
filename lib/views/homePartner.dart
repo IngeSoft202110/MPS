@@ -1,20 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mps/searchFunctions/searchParkingButtons.dart';
 import 'package:mps/services/auth.dart';
-import 'package:mps/models/map.dart';
-import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/userLogSign/selectUser.dart';
-import 'package:mps/views/userLogSign/signin.dart';
 
-List<QueryDocumentSnapshot> list = [];
+import 'mainpageuser.dart';
 
-class HomeClient extends StatefulWidget {
+class HomePartner extends StatefulWidget {
   @override
-  _HomeClientState createState() => _HomeClientState();
+  _HomePartnerState createState() => _HomePartnerState();
 }
 
-class _HomeClientState extends State<HomeClient> {
+class _HomePartnerState extends State<HomePartner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,17 +45,8 @@ class _HomeClientState extends State<HomeClient> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Stack(children: [
-          Map((lista) {
-            setState(() {
-              list = lista;
-            });
-            list = lista;
-          }),
-          Text(list.length.toString()),
-          SearchParkingButtons(list),
-        ]),
+      body: Container(
+        color: Colors.white,
       ),
     );
   }

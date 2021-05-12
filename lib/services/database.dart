@@ -9,11 +9,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseMethods {
   Future addUserInfoToDB(
-      String userId, Map<String, dynamic> userInfoMap) async {
-    return FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
-        .set(userInfoMap);
+      String userId, Map<String, dynamic> userInfoMap, String typeUser) async {
+    if (typeUser == 'cliente') {
+      return FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .set(userInfoMap);
+    } else {
+      return FirebaseFirestore.instance
+          .collection("owners")
+          .doc(userId)
+          .set(userInfoMap);
+    }
   }
 }
 
@@ -66,7 +73,8 @@ class Queries {
           .then((snapshot) async {
         var docs = snapshot.docs;
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => double.parse(element['puntaje']) < 5.1));
+        lista.addAll(
+            docs.where((element) => double.parse(element['puntaje']) < 5.1));
 
         return lista;
       });
@@ -79,7 +87,8 @@ class Queries {
           .then((snapshot) async {
         var docs = snapshot.docs;
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => double.parse(element['precio.carro']) > 5.1));
+        lista.addAll(docs
+            .where((element) => double.parse(element['precio.carro']) > 5.1));
         /*
         var docs3 = snapshot.docs;
         print("Comenzamos la jugadaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -125,7 +134,8 @@ class Queries {
           .then((snapshot) async {
         var docs = snapshot.docs;
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => double.parse(element['precio.moto']) > 5.1));
+        lista.addAll(docs
+            .where((element) => double.parse(element['precio.moto']) > 5.1));
         /*int j = 0;
         int menor;
         bool primero = true;
