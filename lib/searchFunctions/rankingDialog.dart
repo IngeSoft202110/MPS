@@ -47,7 +47,7 @@ class _RankingDialog extends State<RankingDialog> {
             onTap: () {
               if (_rating != null) {
                 setState(() {
-                  update = [];
+                  print(_rating);
                   update = Queries().ranking(parkingList.list, _rating);
                 });
                 if (update.isNotEmpty) {

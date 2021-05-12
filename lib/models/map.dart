@@ -89,6 +89,7 @@ class _Map extends State<Map> {
     List<Placemark> temp = await Queries().addressFromCoordinates(lat, long);
     address = temp.first.street;
     txt.text = address;
+    this.widget.onListUpdated(lista);
   }
 
   Future search(String addr) async {
@@ -104,6 +105,7 @@ class _Map extends State<Map> {
           target: LatLng(locations.first.latitude, locations.first.longitude),
           zoom: 15.0)));
     });
+    posPerson = LatLng(locations.first.latitude, locations.first.longitude);
     this.widget.onListUpdated(lista);
   }
 
