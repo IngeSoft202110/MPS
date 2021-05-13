@@ -71,7 +71,7 @@ class Queries {
       List<QueryDocumentSnapshot> lista, int puntaje) {
     List<QueryDocumentSnapshot> li = [];
     li.addAll(
-        lista.where((element) => (int.parse(element['puntaje'])) == puntaje));
+        lista.where((element) => (double.parse(element['puntaje'])) >= puntaje));
 
     return li;
   }
