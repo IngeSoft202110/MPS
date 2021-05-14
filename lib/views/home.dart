@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/mainpageuser.dart';
-import 'package:mps/views/signin.dart';
+import 'package:mps/views/userLogSign/signin.dart';
 import 'package:mps/views/searchList.dart';
+import 'package:mps/views/mainpageuser.dart';
+import 'package:mps/views/userLogSign/signin.dart';
 
 import '../services/database.dart';
 import 'displayList.dart';
+import 'searchButton.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -25,21 +28,21 @@ class _HomeState extends State<Home> {
   }
 
   Future searchRanking() async {
-    lista = await Queries().ranking();
+    //lista = await Queries().ranking();
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
 
   Future searchPriceCar() async {
-    lista = await Queries().priceCar();
+    //lista = await Queries().priceCar();
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
   }
 
   Future searchPriceMot() async {
-    lista = await Queries().pricemMotorcycle();
+    //lista = await Queries().pricemMotorcycle();
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => DisplayList(lista: lista)));
@@ -60,22 +63,21 @@ class _HomeState extends State<Home> {
               });
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.account_circle),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainPageUser()));
-                      }),
-                  Icon(Icons.exit_to_app)
-                ],
-              ),
-            ),
-          ),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.account_circle),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPageUser()));
+                        }),
+                    Icon(Icons.exit_to_app),
+                  ],
+                )),
+          )
         ],
       ),
       body: Container(
@@ -132,33 +134,13 @@ class _HomeState extends State<Home> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 25, vertical: 10),
                               child: GestureDetector(
-                                child: Text("Price"),
+                                child: Text("Precio"),
                                 onTap: () {
-                                  //lol
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25, vertical: 10),
-                                      child: GestureDetector(
-                                          child: Text("Price CAR"),
-                                          onTap: () {
-                                            searchPriceCar();
-                                          }),
-                                    ),
-                                  );
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25, vertical: 10),
-                                      child: GestureDetector(
-                                          child: Text("Price Motorcycle"),
-                                          onTap: () {
-                                            searchPriceMot();
-                                          }),
-                                    ),
-                                  );
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchButton()));
                                 },
                               )),
                         ),

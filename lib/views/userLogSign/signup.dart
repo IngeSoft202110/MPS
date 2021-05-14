@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
-import 'package:mps/views/signin.dart';
 
-import 'home.dart';
+import 'package:mps/views/homeClient.dart';
+import 'package:mps/views/userLogSign/signin.dart';
+import 'package:mps/widgets/logoContainer.dart';
+
+import '../homePartner.dart';
 
 class SignUp extends StatefulWidget {
+  final typeUser;
+  SignUp({Key key, this.typeUser}) : super(key: key);
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -20,13 +26,20 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         _isLoading = true;
       });
-      authMethods.signUpWithEmailAndPassword(email, password).then((val) {
+      authMethods
+          .signUpWithEmailAndPassword(context, email, password, widget.typeUser)
+          .then((val) {
         if (val != null) {
           setState(() {
             _isLoading = false;
           });
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+          if (widget.typeUser == 'cliente') {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeClient()));
+          } else if (widget.typeUser == 'socio') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomePartner()));
+          }
         }
       });
     }
@@ -52,12 +65,7 @@ class _SignUpState extends State<SignUp> {
                 margin: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
-                    Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 100, vertical: 0),
-                        child: Center(
-                            child:
-                                Image(image: AssetImage('assets/Logo.png')))),
+                    LogoContainer().getLogo(),
                     Spacer(),
                     TextFormField(
                       validator: (val) {
@@ -128,7 +136,9 @@ class _SignUpState extends State<SignUp> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignIn()));
+                                    builder: (context) => SignIn(
+                                          typeUser: widget.typeUser,
+                                        )));
                           },
                           child: Text("Inicia Sesión",
                               style: TextStyle(

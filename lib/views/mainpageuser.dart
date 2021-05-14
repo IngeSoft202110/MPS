@@ -21,28 +21,15 @@ class _MainPageUserState extends State<MainPageUser> {
               context, MaterialPageRoute(builder: (context) => Home())),
         ),
         backgroundColor: Colors.blue[900],
-        title: Text("Managing Parking System"),
+        title: Text("User Profile"),
       ),
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 140, vertical: 30),
-            child: Center(
-              child: Image(image: AssetImage('assets/Logo_Acron.png')),
-            ),
-          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Text(
-                "User Profile",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black),
-              ),
             ),
           ),
         ],
