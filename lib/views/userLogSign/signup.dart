@@ -31,7 +31,7 @@ class _SignUpState extends State<SignUp> {
 
       try {
         if (await authMethods.signUpWithEmailAndPassword(
-                context, email, password, widget.typeUser) !=
+                context, email, password, name, widget.typeUser) !=
             null) {
           setState(() {
             _isLoading = false;

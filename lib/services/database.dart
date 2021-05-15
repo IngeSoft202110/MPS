@@ -10,17 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DatabaseMethods {
   Future addUserInfoToDB(
       String userId, Map<String, dynamic> userInfoMap, String typeUser) async {
-    if (typeUser == 'cliente') {
-      return FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .set(userInfoMap);
-    } else {
-      return FirebaseFirestore.instance
-          .collection("owners")
-          .doc(userId)
-          .set(userInfoMap);
-    }
+    //if (typeUser == 'cliente') {
+    FirebaseFirestore.instance.collection("users").doc(userId).set(userInfoMap);
+    //} else {
+    FirebaseFirestore.instance
+        .collection("owners")
+        .doc(userId)
+        .set(userInfoMap);
+    //}
   }
 }
 

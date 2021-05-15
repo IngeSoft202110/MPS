@@ -28,7 +28,7 @@ class AuthMethods {
   }
 
   Future signUpWithEmailAndPassword(BuildContext context, String email,
-      String password, String typeUser) async {
+      String password, String name, String typeUser) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -38,7 +38,7 @@ class AuthMethods {
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
         "username": userDetails.email.replaceAll("@gmail.com", ""),
-        "name": userDetails.displayName,
+        "name": name,
         "profileUrl": userDetails.photoURL
       };
 

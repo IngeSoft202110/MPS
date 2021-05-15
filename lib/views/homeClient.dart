@@ -23,6 +23,7 @@ class _HomeClientState extends State<HomeClient> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue[900],
         title: Text("HOME"),
         actions: [
