@@ -6,6 +6,7 @@ import 'package:mps/helpfunctions/sharedpref_help.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/home.dart';
 import 'package:mps/views/signin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthMethods {
@@ -79,6 +80,7 @@ class AuthMethods {
         "profileUrl": userDetails.photoURL
       };
 
+
       DatabaseMethods()
           .addUserInfoToDB(userDetails.uid, userInfoMap)
           .then((value) {
@@ -86,6 +88,12 @@ class AuthMethods {
             context, MaterialPageRoute(builder: (context) => Home()));
       });
     }
+  }
+  
+  getUserByname(String username) async{
+    return await FirebaseFirestore.instance.collection("users")
+    .where("name", isEqualTo: username)
+    .get(); 
   }
 
   Future signOut() async {
