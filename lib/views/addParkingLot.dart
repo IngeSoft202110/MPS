@@ -23,7 +23,7 @@ class _AddParkingLotState extends State<AddParkingLot> {
   int score;
   final _formKey = GlobalKey<FormState>();
 
-  addParking() async {
+  addParking(BuildContext context) async {
     if (_formKey.currentState.validate() && file != null) {
       final filename = basename(file.path);
       final destination = 'Images/$filename';
@@ -48,6 +48,13 @@ class _AddParkingLotState extends State<AddParkingLot> {
           "precio": price
         };
         if (uploadParkingLot(data) != null) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text("Parqueadero agregado correctamente"),
+                  ),
+              barrierDismissible: true);
+          _formKey.currentState.reset();
           // showDialog(
           //   context: context,
           //   builder: (_) => new CupertinoAlertDialog(
@@ -162,7 +169,7 @@ class _AddParkingLotState extends State<AddParkingLot> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    addParking();
+                    addParking(context);
                   },
                   child: Container(
                     decoration: BoxDecoration(

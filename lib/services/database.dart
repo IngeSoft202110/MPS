@@ -150,7 +150,7 @@ class FirebaseUpload {
 
 Future uploadParkingLot(Map<String, dynamic> data) {
   try {
-    FirebaseFirestore.instance.collection('parqueaderos').add(data);
+    return FirebaseFirestore.instance.collection('parqueaderos').add(data);
   } on FirebaseException catch (e) {
     return null;
   }
