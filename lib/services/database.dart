@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -67,8 +70,8 @@ class Queries {
   List<QueryDocumentSnapshot> ranking(
       List<QueryDocumentSnapshot> lista, int puntaje) {
     List<QueryDocumentSnapshot> li = [];
-    li.addAll(
-        lista.where((element) => (double.parse(element['puntaje'])) >= puntaje));
+    li.addAll(lista
+        .where((element) => (double.parse(element['puntaje'])) >= puntaje));
 
     return li;
   }
@@ -131,4 +134,24 @@ String getNameUser() {
   String userName = auth.currentUser.email.replaceAll("@gmail.com", "");
   print(userName);
   return userName;
+}
+
+//Add parkingLot and image to FirebaseStorage
+class FirebaseUpload {
+  static UploadTask uploadFile(String destination, File file) {
+    try {
+      final ref = FirebaseStorage.instance.ref(destination);
+      return ref.putFile(file);
+    } on FirebaseException catch (e) {
+      return null;
+    }
+  }
+}
+
+Future uploadParkingLot(Map<String, dynamic> data) {
+  try {
+    FirebaseFirestore.instance.collection('parqueaderos').add(data);
+  } on FirebaseException catch (e) {
+    return null;
+  }
 }
