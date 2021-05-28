@@ -22,25 +22,23 @@ class AuthMethods {
       User userDetails = userCredential.user;
       return userDetails;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No se encontró un usuario con ese email');
-      } else if (e.code == 'wrong-password') {
-        print('Contraseña incorrecta');
-      }
+      print("error");
+      throw e;
     }
   }
 
   Future signUpWithEmailAndPassword(BuildContext context, String email,
-      String password, String typeUser) async {
+      String password, String name, String typeUser) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      //await auth.signInWithEmailAndPassword(email: email, password: password);
       User userDetails = userCredential.user;
 
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
         "username": userDetails.email.replaceAll("@gmail.com", ""),
-        "name": userDetails.displayName,
+        "name": name,
         "profileUrl": userDetails.photoURL
       };
 
@@ -63,9 +61,10 @@ class AuthMethods {
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
       }
-    } catch (e) {
-      print(e.toString());
-    }
+      throw e;
+    } //catch (e) {
+    //   print(e.toString());
+    // }
   }
 
   signInWithGoogle(BuildContext context, String typeUser) async {

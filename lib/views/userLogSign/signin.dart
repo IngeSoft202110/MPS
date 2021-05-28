@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/homePartner.dart';
 import 'package:mps/views/userLogSign/signup.dart';
 import 'package:mps/widgets/logoContainer.dart';
+
+import '../errorDialog.dart';
 
 class SignIn extends StatefulWidget {
   final typeUser;
@@ -26,8 +30,9 @@ class _SignInState extends State<SignIn> {
         _isLoading = true;
       });
 
-      await AuthMethods().signInEmailAndPassword(email, password).then((val) {
-        if (val != null) {
+      try {
+        if (await AuthMethods().signInEmailAndPassword(email, password) !=
+            null) {
           setState(() {
             _isLoading = false;
           });
@@ -41,7 +46,15 @@ class _SignInState extends State<SignIn> {
                 MaterialPageRoute(builder: (context) => HomePartner()));
           }
         }
-      });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        showDialog(
+            context: context,
+            builder: (context) => ErrorDialog("Error", e.message),
+            barrierDismissible: true);
+      }
     }
   }
 
