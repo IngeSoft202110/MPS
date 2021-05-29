@@ -29,7 +29,7 @@ class AuthMethods {
         print('Contraseña incorrecta');
       }
     }
-  }
+  } 
 
   Future signUpWithEmailAndPassword(String email, String password) async {
     try {
@@ -101,4 +101,54 @@ class AuthMethods {
     prefs.clear();
     await auth.signOut();
   }
+
+  createChatRoom(String chatRoomId, chatRoomMap){
+    FirebaseFirestore.instance.collection("ChatRoom")
+    .doc(chatRoomId).set(chatRoomMap).catchError((e){
+      print(e.toString());
+    });
+  }
+
+  getUserByUserEmail(String userEmail) async{
+    return await FirebaseFirestore.instance.collection("users")
+    .where("email", isEqualTo: userEmail)
+    .get(); 
+  }
+
+  addConversationMenssages(String chatRoomId, menssageMap){
+    
+    FirebaseFirestore.instance.collection("ChatRoom")
+    .doc(chatRoomId)
+    .collection("chats")
+    .add(menssageMap).catchError((e){print(e.toString());});
+    
+  }
+
+  getConversationMenssages(String chatRoomId) async{
+
+    return await FirebaseFirestore.instance.collection("ChatRoom")
+    .doc(chatRoomId)
+    .collection("chats")
+    .orderBy("time", descending: false)
+    .snapshots();
+
+  }
+
+  getChatRooms(String userName) async{
+    return await FirebaseFirestore.instance.collection("ChatRoom")
+    .where("users", arrayContains: userName)
+    .snapshots();
+  }
+
+  Future<bool> addChatRoom(chatRoom, chatRoomId) {
+    FirebaseFirestore.instance
+        .collection("chatRoom")
+        .doc(chatRoomId)
+        .set(chatRoom)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+
 }
