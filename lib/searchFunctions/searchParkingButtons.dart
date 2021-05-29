@@ -86,6 +86,16 @@ class _Buttons extends State<SearchParkingButtons> {
             },
           ),
         ),
+        GestureDetector(
+          child: button('assets/reset.png'),
+          onTap: () {
+            if ((parkingList.initlist != null) &&
+                (parkingList.notNull(parkingList.initlist))) {
+              parkingList.ranking = true;
+              parkingList.list = parkingList.initlist;
+            }
+          },
+        ),
       ],
     );
   }

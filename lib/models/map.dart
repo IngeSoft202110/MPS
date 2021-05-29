@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 class Map extends StatefulWidget {
   final Function(List<QueryDocumentSnapshot>) onListUpdated;
-  Map(this.onListUpdated);
+  final Function(List<QueryDocumentSnapshot>) onInitList;
+  Map(this.onListUpdated, this.onInitList);
 
   @override
   _Map createState() => _Map();
@@ -74,7 +75,7 @@ class _Map extends State<Map> {
     setState(() {
       nearParking();
     });
-
+    this.widget.onInitList(lista);
     this.widget.onListUpdated(lista);
   }
 
@@ -107,6 +108,7 @@ class _Map extends State<Map> {
     });
     posPerson = LatLng(locations.first.latitude, locations.first.longitude);
     this.widget.onListUpdated(lista);
+    this.widget.onInitList(lista);
   }
 
   Future nearParking() async {
@@ -257,6 +259,7 @@ class _Map extends State<Map> {
       addMarker(tappedPoint);
       circles(tappedPoint);
     });
+    this.widget.onInitList(lista);
     this.widget.onListUpdated(lista);
   }
 
