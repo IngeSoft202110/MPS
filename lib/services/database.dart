@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -171,4 +173,24 @@ void setEmailUser(String newEmail) {
   final FirebaseAuth auth = FirebaseAuth.instance;
   auth.currentUser.verifyBeforeUpdateEmail(newEmail);
   print(newEmail);
+}
+
+//Add parkingLot and image to FirebaseStorage
+class FirebaseUpload {
+  static UploadTask uploadFile(String destination, File file) {
+    try {
+      final ref = FirebaseStorage.instance.ref(destination);
+      return ref.putFile(file);
+    } on FirebaseException catch (e) {
+      return null;
+    }
+  }
+}
+
+Future uploadParkingLot(Map<String, dynamic> data) {
+  try {
+    return FirebaseFirestore.instance.collection('parqueaderos').add(data);
+  } on FirebaseException catch (e) {
+    return null;
+  }
 }
