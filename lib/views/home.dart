@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/searchButton.dart';
-import 'package:mps/views/searchList.dart';
+//import 'package:mps/views/searchList.dart';
 import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/userLogSign/signin.dart';
 
@@ -117,10 +117,10 @@ class _HomeState extends State<Home> {
                             child: GestureDetector(
                               child: Text("Cercanía"),
                               onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchList()));
+                                //Navigator.pushReplacement(
+                                //  context,
+                                // MaterialPageRoute(
+                                //   builder: (context) => SearchList()));
                               },
                             ),
                           ),

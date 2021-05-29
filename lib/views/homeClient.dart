@@ -60,8 +60,17 @@ class _HomeClientState extends State<HomeClient> {
           Map((lista) {
             setState(() {
               parkingList.list = lista;
+              list = lista;
             });
             list = lista;
+          }, (initList) {
+            if (initList == null) {
+              parkingList.initlist = list;
+            } else {
+              setState(() {
+                parkingList.initlist = initList;
+              });
+            }
           }),
           SearchParkingButtons(parkingList.list),
         ]),

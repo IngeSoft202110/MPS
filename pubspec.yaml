@@ -28,6 +28,7 @@ dependencies:
   http:
   google_maps_controller: ^1.2.0
   provider:
+  carousel_slider: ^3.0.0
 
 
   flutter_polyline_points:

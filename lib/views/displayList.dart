@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/views/visualizeparking.dart';
-import 'package:mps/views/searchList.dart';
 
 //Class to show list of parkings
 class DisplayList extends StatefulWidget {
@@ -27,12 +26,6 @@ class _DisplayList extends State<DisplayList> {
         child: new Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 30),
-              child: Center(
-                child: Image(image: AssetImage('assets/Logo_Acron.png')),
-              ),
-            ),
-            Container(
               color: Colors.blue[900],
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
@@ -54,7 +47,7 @@ class _DisplayList extends State<DisplayList> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot course = lista[index];
                   return new ListTile(
-                    leading: Image.network(course['imagen']),
+                    leading: Image.network(course['imagen'][0]),
                     title: Text(course['nombre']),
                     subtitle: Text(course['direccion']),
                     onTap: () {
@@ -62,7 +55,7 @@ class _DisplayList extends State<DisplayList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VisualizeParking(value: value),
+                          builder: (context) => VisualizeParking(value, course),
                         ),
                       );
                     },
