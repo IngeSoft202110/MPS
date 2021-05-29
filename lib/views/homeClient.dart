@@ -6,6 +6,7 @@ import 'package:mps/services/auth.dart';
 import 'package:mps/models/map.dart';
 import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/userLogSign/selectUser.dart';
+import 'package:mps/widgets/sideBarClient.dart';
 import 'package:mps/views/userLogSign/signin.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ class _HomeClientState extends State<HomeClient> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         backgroundColor: Colors.blue[900],
         title: Text("HOME"),
         actions: [
@@ -55,6 +56,7 @@ class _HomeClientState extends State<HomeClient> {
           )
         ],
       ),
+      drawer: SideBarClient(),
       body: SingleChildScrollView(
         child: Stack(children: [
           Map((lista) {
