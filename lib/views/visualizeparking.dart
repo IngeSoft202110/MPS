@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mps/models/imageCarousel.dart';
 import 'package:mps/models/raiting.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
@@ -10,21 +11,28 @@ var parking;
 
 class VisualizeParking extends StatefulWidget {
   final String value;
-  VisualizeParking({Key key, @required this.value}) : super(key: key);
+  final DocumentSnapshot parkingLot;
+  VisualizeParking(this.value, this.parkingLot);
 
   @override
-  _VisualizeParkingState createState() => _VisualizeParkingState(value: value);
+  _VisualizeParkingState createState() =>
+      _VisualizeParkingState(value, parkingLot);
 }
 
 class _VisualizeParkingState extends State<VisualizeParking> {
   String value;
-  _VisualizeParkingState({this.value});
-  var parking;
   DocumentSnapshot parkingLot;
+  _VisualizeParkingState(this.value, this.parkingLot);
+  var parking;
+  List<String> list = [];
+  int cont = 0;
 
   @override
   void initState() {
     parking = Queries().parkingLotById(value);
+    for (String i in parkingLot.data()["imagen"]) {
+      list.add(i);
+    }
     super.initState();
   }
 
@@ -38,12 +46,6 @@ class _VisualizeParkingState extends State<VisualizeParking> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 30),
-              child: Center(
-                child: Image(image: AssetImage('assets/Logo_Acron.png')),
-              ),
-            ),
             StreamBuilder(
                 stream: parking,
                 builder: (context, snapshot) {
@@ -57,13 +59,13 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
+                                horizontal: 20, vertical: 50),
                           ),
                           Text(
                             parking["nombre"],
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 25,
+                                fontSize: 30,
                                 color: Colors.black),
                           ),
                           Row(children: [
@@ -97,7 +99,7 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Icon(Icons.link)
                         ],
                       ),
-                      Image.network(parking["imagen"], width: 350),
+                      ImageCarousel(list),
                       Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -172,8 +174,10 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Rating((rating) {
                             setState(() {
                               _rating = rating;
-                              parking = Queries().parkingLotById(
-                                  value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
+                              parking = Queries().parkingLotById(value);
+                              for (String i in parkingLot.data()["imagen"]) {
+                                list.add(i);
+                              } //Esto hace que se refresque el dibujado de la querie de parqueaderos
                             });
                           }),
                           SizedBox(
@@ -245,19 +249,32 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                             ),
                         ],
                       ),
+                      Text("Seguir ruta:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          )),
                       Row(
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 0),
                             child: GestureDetector(
-                              child: Text("Como llegar: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  )),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.blue[100],
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Text("Como llegar",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    )),
+                              ),
                               onTap: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ShowRoute(

@@ -2,9 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/parkingLots.dart';
 import 'package:mps/services/auth.dart';
-import 'package:mps/views/home.dart';
 import 'package:mps/views/homeClient.dart';
-import 'package:mps/views/signin.dart';
+import 'package:mps/views/userLogSign/selectUser.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
                 if (snapshot.hasData) {
                   return HomeClient();
                 } else {
-                  return SignIn();
+                  return SelectUser();
                 }
               })),
     );

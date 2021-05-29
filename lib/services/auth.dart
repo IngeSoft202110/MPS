@@ -5,8 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mps/helpfunctions/sharedpref_help.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/home.dart';
-import 'package:mps/views/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mps/views/homeClient.dart';
+import 'package:mps/views/homePartner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthMethods {
@@ -23,19 +24,38 @@ class AuthMethods {
       User userDetails = userCredential.user;
       return userDetails;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No se encontró un usuario con ese email');
-      } else if (e.code == 'wrong-password') {
-        print('Contraseña incorrecta');
-      }
+      print("error");
+      throw e;
     }
   } 
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
+  Future signUpWithEmailAndPassword(BuildContext context, String email,
+      String password, String name, String typeUser) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      //await auth.signInWithEmailAndPassword(email: email, password: password);
       User userDetails = userCredential.user;
+
+      Map<String, dynamic> userInfoMap = {
+        "email": userDetails.email,
+        "username": userDetails.email.replaceAll("@gmail.com", ""),
+        "name": name,
+        "profileUrl": userDetails.photoURL
+      };
+
+      DatabaseMethods()
+          .addUserInfoToDB(userDetails.uid, userInfoMap, typeUser)
+          .then((value) {
+        // if (typeUser == 'cliente') {
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => HomeClient()));
+        // } else if (typeUser == 'socio') {
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => HomePartner()));
+        // }
+      });
+
       return userDetails;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -43,12 +63,13 @@ class AuthMethods {
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
       }
-    } catch (e) {
-      print(e.toString());
-    }
+      throw e;
+    } //catch (e) {
+    //   print(e.toString());
+    // }
   }
 
-  signInWithGoogle(BuildContext context) async {
+  signInWithGoogle(BuildContext context, String typeUser) async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -82,10 +103,15 @@ class AuthMethods {
 
 
       DatabaseMethods()
-          .addUserInfoToDB(userDetails.uid, userInfoMap)
+          .addUserInfoToDB(userDetails.uid, userInfoMap, typeUser)
           .then((value) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
+        if (typeUser == 'cliente') {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeClient()));
+        } else if (typeUser == 'socio') {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomePartner()));
+        }
       });
     }
   }

@@ -1,10 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/views/homeClient.dart';
-import 'package:mps/views/signup.dart';
-import 'package:mps/views/home.dart';
+import 'package:mps/views/homePartner.dart';
+import 'package:mps/views/userLogSign/signup.dart';
+import 'package:mps/widgets/logoContainer.dart';
+
+import '../errorDialog.dart';
 
 class SignIn extends StatefulWidget {
+  final typeUser;
+  SignIn({Key key, this.typeUser}) : super(key: key);
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -22,27 +30,47 @@ class _SignInState extends State<SignIn> {
         _isLoading = true;
       });
 
-      await AuthMethods().signInEmailAndPassword(email, password).then((val) {
-        if (val != null) {
+      try {
+        if (await AuthMethods().signInEmailAndPassword(email, password) !=
+            null) {
           setState(() {
             _isLoading = false;
           });
           //aassas
-
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeClient()));
+          if (widget.typeUser == 'cliente') {
+            print("ando por aquí");
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeClient()));
+          } else if (widget.typeUser == 'socio') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomePartner()));
+          }
         }
-      });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        showDialog(
+            context: context,
+            builder: (context) => ErrorDialog("Error", e.message),
+            barrierDismissible: true);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.typeUser);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         brightness: Brightness.light,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+          color: Colors.black,
+        ),
       ),
       body: _isLoading == true
           ? Container(
@@ -57,14 +85,9 @@ class _SignInState extends State<SignIn> {
                   margin: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
-                      Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 0),
-                          child: Center(
-                              child:
-                                  Image(image: AssetImage('assets/Logo.png')))),
+                      LogoContainer().getLogo(),
                       SizedBox(
-                        height: 200,
+                        height: 140,
                       ),
                       TextFormField(
                         validator: (val) {
@@ -116,7 +139,8 @@ class _SignInState extends State<SignIn> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          AuthMethods().signInWithGoogle(context);
+                          AuthMethods()
+                              .signInWithGoogle(context, widget.typeUser);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -149,7 +173,8 @@ class _SignInState extends State<SignIn> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUp()));
+                                      builder: (context) =>
+                                          SignUp(typeUser: widget.typeUser)));
                             },
                             child: Text("Regístrate",
                                 style: TextStyle(

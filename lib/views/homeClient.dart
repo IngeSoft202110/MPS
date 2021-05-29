@@ -4,8 +4,9 @@ import 'package:mps/models/parkingLots.dart';
 import 'package:mps/searchFunctions/searchParkingButtons.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/models/map.dart';
-import 'package:mps/views/signin.dart';
 import 'package:mps/views/mainpageuser.dart';
+import 'package:mps/views/userLogSign/selectUser.dart';
+import 'package:mps/views/userLogSign/signin.dart';
 import 'package:provider/provider.dart';
 
 List<QueryDocumentSnapshot> list = [];
@@ -22,14 +23,18 @@ class _HomeClientState extends State<HomeClient> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue[900],
         title: Text("HOME"),
         actions: [
           InkWell(
             onTap: () {
               AuthMethods().signOut().then((s) {
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => SignIn()));
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => SelectUser()),
+                    ModalRoute.withName('/'));
               });
             },
             child: Container(
@@ -55,8 +60,17 @@ class _HomeClientState extends State<HomeClient> {
           Map((lista) {
             setState(() {
               parkingList.list = lista;
+              list = lista;
             });
             list = lista;
+          }, (initList) {
+            if (initList == null) {
+              parkingList.initlist = list;
+            } else {
+              setState(() {
+                parkingList.initlist = initList;
+              });
+            }
           }),
           SearchParkingButtons(parkingList.list),
         ]),

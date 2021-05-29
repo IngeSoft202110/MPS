@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 class Map extends StatefulWidget {
   final Function(List<QueryDocumentSnapshot>) onListUpdated;
-  Map(this.onListUpdated);
+  final Function(List<QueryDocumentSnapshot>) onInitList;
+  Map(this.onListUpdated, this.onInitList);
 
   @override
   _Map createState() => _Map();
@@ -70,12 +71,13 @@ class _Map extends State<Map> {
     _initialPosition = LatLng(position.latitude, position.longitude);
     lista = await getList(_initialPosition);
     change(position.latitude, position.longitude);
-
+    posPerson = _initialPosition;
     setState(() {
       nearParking();
     });
-
+    this.widget.onInitList(lista);
     this.widget.onListUpdated(lista);
+    print(lista.length);
   }
 
   @override
@@ -89,6 +91,7 @@ class _Map extends State<Map> {
     List<Placemark> temp = await Queries().addressFromCoordinates(lat, long);
     address = temp.first.street;
     txt.text = address;
+    this.widget.onListUpdated(lista);
   }
 
   Future search(String addr) async {
@@ -104,7 +107,9 @@ class _Map extends State<Map> {
           target: LatLng(locations.first.latitude, locations.first.longitude),
           zoom: 15.0)));
     });
+    posPerson = LatLng(locations.first.latitude, locations.first.longitude);
     this.widget.onListUpdated(lista);
+    this.widget.onInitList(lista);
   }
 
   Future nearParking() async {
@@ -117,7 +122,7 @@ class _Map extends State<Map> {
         loc =
             await Queries().locationFromAddress(course['direccion'].toString());
         setState(() {
-          markers(LatLng(loc.first.latitude, loc.first.longitude));
+          markers(LatLng(loc.first.latitude, loc.first.longitude), course);
         });
       }
     }
@@ -127,6 +132,7 @@ class _Map extends State<Map> {
   Future updateParking(ParkingLots updatedList) async {
     List<Location> loc = [];
     DocumentSnapshot course;
+    print((updatedList.list).length);
     if (updatedList.list.isNotEmpty) {
       for (int i = 0; i < updatedList.list.length; i++) {
         course = updatedList.list[i];
@@ -134,7 +140,7 @@ class _Map extends State<Map> {
         loc =
             await Queries().locationFromAddress(course['direccion'].toString());
         setState(() {
-          markers(LatLng(loc.first.latitude, loc.first.longitude));
+          markers(LatLng(loc.first.latitude, loc.first.longitude), course);
         });
       }
     }
@@ -255,6 +261,7 @@ class _Map extends State<Map> {
       addMarker(tappedPoint);
       circles(tappedPoint);
     });
+    this.widget.onInitList(lista);
     this.widget.onListUpdated(lista);
   }
 
@@ -269,13 +276,16 @@ class _Map extends State<Map> {
   }
 
   //Set red markers for nearby parkinglots
-  void markers(LatLng latsLongs) {
+  void markers(LatLng latsLongs, DocumentSnapshot place) {
     print(latsLongs);
     myMarker.add(
       Marker(
-        markerId: MarkerId(latsLongs.toString()),
-        position: latsLongs,
-      ),
+          markerId: MarkerId(latsLongs.toString()),
+          position: latsLongs,
+          infoWindow: InfoWindow(
+            title: place.data()["nombre"],
+            snippet: place.data()["direccion"],
+          )),
     );
   }
 }
