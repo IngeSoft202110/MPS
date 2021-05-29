@@ -71,12 +71,13 @@ class _Map extends State<Map> {
     _initialPosition = LatLng(position.latitude, position.longitude);
     lista = await getList(_initialPosition);
     change(position.latitude, position.longitude);
-
+    posPerson = _initialPosition;
     setState(() {
       nearParking();
     });
     this.widget.onInitList(lista);
     this.widget.onListUpdated(lista);
+    print(lista.length);
   }
 
   @override
@@ -121,7 +122,7 @@ class _Map extends State<Map> {
         loc =
             await Queries().locationFromAddress(course['direccion'].toString());
         setState(() {
-          markers(LatLng(loc.first.latitude, loc.first.longitude));
+          markers(LatLng(loc.first.latitude, loc.first.longitude), course);
         });
       }
     }
@@ -131,6 +132,7 @@ class _Map extends State<Map> {
   Future updateParking(ParkingLots updatedList) async {
     List<Location> loc = [];
     DocumentSnapshot course;
+    print((updatedList.list).length);
     if (updatedList.list.isNotEmpty) {
       for (int i = 0; i < updatedList.list.length; i++) {
         course = updatedList.list[i];
@@ -138,7 +140,7 @@ class _Map extends State<Map> {
         loc =
             await Queries().locationFromAddress(course['direccion'].toString());
         setState(() {
-          markers(LatLng(loc.first.latitude, loc.first.longitude));
+          markers(LatLng(loc.first.latitude, loc.first.longitude), course);
         });
       }
     }
@@ -274,13 +276,16 @@ class _Map extends State<Map> {
   }
 
   //Set red markers for nearby parkinglots
-  void markers(LatLng latsLongs) {
+  void markers(LatLng latsLongs, DocumentSnapshot place) {
     print(latsLongs);
     myMarker.add(
       Marker(
-        markerId: MarkerId(latsLongs.toString()),
-        position: latsLongs,
-      ),
+          markerId: MarkerId(latsLongs.toString()),
+          position: latsLongs,
+          infoWindow: InfoWindow(
+            title: place.data()["nombre"],
+            snippet: place.data()["direccion"],
+          )),
     );
   }
 }
