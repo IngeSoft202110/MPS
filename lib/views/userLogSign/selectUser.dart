@@ -6,25 +6,24 @@ import 'package:mps/widgets/logoContainer.dart';
 class SelectUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Scaffold(
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                  LogoContainer().getLogo(),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  FormUser(),
-                ],
-              ),
+    return Scaffold(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              //padding: EdgeInsets.all(20.0),
+              children: <Widget>[
+                Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                LogoContainer().getLogo(),
+                SizedBox(
+                  height: 60,
+                ),
+                FormUser(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
