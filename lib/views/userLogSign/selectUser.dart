@@ -12,7 +12,6 @@ class SelectUser extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: ListView(
-              //padding: EdgeInsets.all(20.0),
               children: <Widget>[
                 Padding(padding: EdgeInsets.symmetric(vertical: 20)),
                 LogoContainer().getLogo(),
