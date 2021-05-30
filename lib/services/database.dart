@@ -94,8 +94,17 @@ class Queries {
     return li;
   }
 
-  //search by Ranking
-  //buenas
+  Future<List<QueryDocumentSnapshot>> owner(
+          String nombre) =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+          // ignore: missing_return
+          .then((snapshot) async {
+        var docs = snapshot.docs;
+        List<QueryDocumentSnapshot> lista = [];
+        lista.addAll(docs.where((element) => element['dueno'].compareTo(nombre)));
+        
+        return lista;
+      });
 
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
