@@ -146,6 +146,13 @@ String getEmailUser() {
   return userEmail;
 }
 
+//Pa borrar al vato enchufado
+void deleteUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  print(auth.currentUser.displayName + " will be deleted");
+  auth.currentUser.delete();
+}
+
 //Pa la foto del username del vato enchufado
 String getPhotoURLUSer() {
   final FirebaseAuth auth = FirebaseAuth.instance;
