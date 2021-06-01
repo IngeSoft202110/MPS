@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/views/visualizeparking.dart';
 
+import 'mainpageuser.dart';
+
 //Class to show list of favorite parkings
 class FavoritesList extends StatefulWidget {
   final List<DocumentSnapshot> lista;
@@ -19,6 +21,11 @@ class _FavoriteList extends State<FavoritesList> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainPageUser())),
+        ),
         backgroundColor: Colors.blue[900],
         title: Text("Favorite Parkings"),
       ),
@@ -30,7 +37,7 @@ class _FavoriteList extends State<FavoritesList> {
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
               child: Text(
-                "Resultados de la búsqueda",
+                "Parqueaderos Favoritos",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

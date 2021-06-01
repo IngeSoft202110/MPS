@@ -21,6 +21,7 @@ class VisualizeParking extends StatefulWidget {
 
 class _VisualizeParkingState extends State<VisualizeParking> {
   String value;
+  bool favorite = false;
   DocumentSnapshot parkingLot;
   _VisualizeParkingState(this.value, this.parkingLot);
   var parking;
@@ -36,12 +37,39 @@ class _VisualizeParkingState extends State<VisualizeParking> {
     super.initState();
   }
 
+  _likePressed() {
+    setState(() {
+      favorite = !favorite;
+      parking = Queries().parkingLotById(value);
+      for (String i in parkingLot.data()["imagen"]) {
+        list.add(i);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
         title: Text("Managing Parking System"),
+        actions: [
+          InkWell(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                            favorite
+                                ? Icons.favorite
+                                : Icons.favorite_border_outlined,
+                            color: favorite ? Colors.red : Colors.white),
+                        onPressed: () => _likePressed()),
+                  ],
+                )),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -1,17 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mps/services/auth.dart';
 import 'package:mps/views/favorites.dart';
-import 'package:mps/views/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/services/database.dart';
-import 'package:mps/views/errorDialog.dart';
-import '../services/database.dart';
-import '../services/database.dart';
-import '../services/database.dart';
-import '../services/database.dart';
 import '../services/database.dart';
 import 'userLogSign/formUser.dart';
 
