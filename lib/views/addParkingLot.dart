@@ -45,7 +45,7 @@ class _AddParkingLotState extends State<AddParkingLot> {
           "direccion": parking.getAddress(),
           "descripcion": parking.getDescription(),
           "comentarios": comments,
-          "imagen": urlImage,
+          "imagen": images,
           "puntaje": score.toString(),
           "precio": price,
           "dueno": getNameUser()
