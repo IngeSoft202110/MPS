@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
+import 'package:mps/services/database.dart';
 
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/userLogSign/signin.dart';
@@ -42,8 +44,10 @@ class _SignUpState extends State<SignUp> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomeClient()));
           } else if (widget.typeUser == 'socio') {
+            List<QueryDocumentSnapshot> lista = []; 
+              lista = await Queries().owner();
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomePartner()));
+                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
           }
         }
       } on FirebaseAuthException catch (e) {

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -101,13 +102,15 @@ class AuthMethods {
 
       DatabaseMethods()
           .addUserInfoToDB(userDetails.uid, userInfoMap, typeUser)
-          .then((value) {
+          .then((value) async {
         if (typeUser == 'cliente') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => HomeClient()));
         } else if (typeUser == 'socio') {
+          List<QueryDocumentSnapshot> lista = []; 
+              lista = await Queries().owner();
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePartner()));
+              context, MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
         }
       });
     }
