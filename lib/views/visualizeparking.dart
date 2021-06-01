@@ -186,22 +186,29 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                   ? Text("Has puntuado $_rating ",
                                       style: TextStyle(fontSize: 15))
                                   : SizedBox.shrink()),
-                          TextButton(
-                              child: Text("Publicar",
-                                  style: TextStyle(
-                                      color: Colors.black,
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all<TextStyle>(
+                                  TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15)),
-                              onPressed: () {
-                                var comentario = {
-                                  'comentario': _coment,
-                                  'estrellas': _rating.toString(),
-                                  'usuario': ''
-                                };
-                                modifyComment(value, comentario);
-                                parking = Queries().parkingLotById(
-                                    value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
-                              }),
+                                      fontSize: 25),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue[900]),
+                                alignment: Alignment.center),
+                            onPressed: () {
+                              var comentario = {
+                                'comentario': _coment,
+                                'estrellas': _rating.toString(),
+                                'usuario': ''
+                              };
+                              modifyComment(value, comentario);
+                              parking = Queries().parkingLotById(
+                                  value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
+                            },
+                            child: Text("Publicar"),
+                          ),
                         ],
                       ),
                       Row(
