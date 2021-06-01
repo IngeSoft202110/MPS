@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class ParkingLots with ChangeNotifier {
   List<QueryDocumentSnapshot> _list;
   bool _ranking;
+  List<QueryDocumentSnapshot> _initlist;
 
   get ranking {
     return _ranking;
@@ -21,6 +22,16 @@ class ParkingLots with ChangeNotifier {
 
   set list(List<QueryDocumentSnapshot> list) {
     this._list = list;
+
+    notifyListeners();
+  }
+
+  get initlist {
+    return _initlist;
+  }
+
+  set initlist(List<QueryDocumentSnapshot> initlist) {
+    this._initlist = initlist;
 
     notifyListeners();
   }
