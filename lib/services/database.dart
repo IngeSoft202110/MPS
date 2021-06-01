@@ -95,17 +95,27 @@ class Queries {
   }
 
   Future<List<QueryDocumentSnapshot>> owner(
-          String nombre) =>
+          ) =>
       FirebaseFirestore.instance.collection('parqueaderos').get()
           // ignore: missing_return
           .then((snapshot) async {
         var docs = snapshot.docs;
+        String nombre;
+        nombre = getNameUser();
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => element['dueno'].compareTo(nombre)));
+        lista.addAll(docs.where((element) => vali(nombre,element['dueno'].toString())));
         
         return lista;
       });
 
+  bool vali(String nombre, String comparacion){
+
+    if(comparacion.compareTo(nombre) == 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
