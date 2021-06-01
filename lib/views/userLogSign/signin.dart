@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mps/services/auth.dart';
+import 'package:mps/services/database.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/homePartner.dart';
 import 'package:mps/views/userLogSign/signup.dart';
@@ -21,6 +23,7 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   String email, password;
   AuthMethods authMethods = new AuthMethods();
+  List<QueryDocumentSnapshot> lista = []; 
 
   bool _isLoading = false;
 
@@ -42,8 +45,9 @@ class _SignInState extends State<SignIn> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomeClient()));
           } else if (widget.typeUser == 'socio') {
+            lista = await Queries().owner();
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomePartner()));
+                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
           }
         }
       } on FirebaseAuthException catch (e) {
