@@ -47,7 +47,8 @@ class _AddParkingLotState extends State<AddParkingLot> {
           "comentarios": comments,
           "imagen": urlImage,
           "puntaje": score.toString(),
-          "precio": price
+          "precio": price,
+          "dueno": getNameUser()
         };
         if (uploadParkingLot(data) != null) {
           showDialog(
