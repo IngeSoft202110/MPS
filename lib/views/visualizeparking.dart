@@ -1,4 +1,3 @@
-import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/imageCarousel.dart';
@@ -210,60 +209,16 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: "Escriba su comentario aquí",
-                                  labelText: "Comentar",
-                                  labelStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                  )),
-                              onChanged: (val) {
-                                _coment = val;
-                              },
-                            ),
-                          ),
-                          Text("Puntuar",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Rating((rating) {
-                            setState(() {
-                              _rating = rating;
-                              parking = Queries().parkingLotById(
-                                  value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
-                            });
-                          }),
-                          SizedBox(
-                              height: 44,
-                              child: _rating != null && _rating > 0
-                                  ? Text("Has puntuado $_rating ",
-                                      style: TextStyle(fontSize: 15))
-                                  : SizedBox.shrink()),
-                          TextButton(
-                              child: Text("Publicar",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15)),
-                              onPressed: () {
-                                var comentario = {
-                                  'comentario': _coment,
-                                  'estrellas': _rating.toString(),
-                                  'usuario': ''
-                                };
-                                modifyComment(value, comentario);
-                                parking = Queries().parkingLotById(
-                                    value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
-                              }),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
                             child: Text("Comentarios: ",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 )),
                           ),
+                        ],
+                      ),
+                      Column(
+                        children: [
                           for (var i in parking["comentarios"])
                             Row(
                               children: [
