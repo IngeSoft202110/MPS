@@ -21,7 +21,6 @@ class _AddParkingLotState extends State<AddParkingLot> {
   ParkingLot parking = new ParkingLot();
   String priceCar, priceBike;
   int score;
-  List images = [];
   final _formKey = GlobalKey<FormState>();
 
   addParking(BuildContext context) async {
@@ -34,7 +33,6 @@ class _AddParkingLotState extends State<AddParkingLot> {
       if (url != null) {
         final snapshot = await url.whenComplete(() {});
         final urlImage = await snapshot.ref.getDownloadURL();
-        images.add(urlImage);
         var comentario = {'comentario': "", 'estrellas': "", 'usuario': ''};
         List comments = [];
         comments.add(comentario);
