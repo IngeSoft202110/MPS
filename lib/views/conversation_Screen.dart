@@ -25,10 +25,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
       stream: chatMenssagesStream,
       builder: (context, snapshot){
         return snapshot.hasData ? ListView.builder(
-          itemCount: snapshot.data.documents.length,
+          itemCount: snapshot.data.docs.length,
           itemBuilder: (context, index){
-            return MenssageTile(snapshot.data.documents[index].data["menssage"],
-              snapshot.data.documents[index].data["sendBy"] == Constant.myName);
+            return MenssageTile(snapshot.data.docs[index].data["menssage"],
+              snapshot.data.docs[index].data["sendBy"] == Constant.myName);
           }) : Container();
       },
     );

@@ -32,9 +32,9 @@ class _Search_peopleState extends State<Search_people> {
   }
 
   Widget searchL() {
-   return haveUserSearched ? ListView.builder(
+   return searchSnapshot != null ? ListView.builder(
+      itemCount: searchSnapshot.docs.length,  
       shrinkWrap: true,
-      itemCount: searchSnapshot.docs.length,
         itemBuilder: (context, index){
         return userTile(
           searchSnapshot.docs[index].get("userName"),
