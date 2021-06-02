@@ -5,7 +5,6 @@ import 'package:mps/services/auth.dart';
 import 'package:mps/views/conversation_Screen.dart';
 import 'package:mps/views/search_people.dart';
 import 'package:mps/views/widget_chat.dart';
-
 import 'homeClient.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -48,7 +47,7 @@ class _ChatRoomState extends State<ChatRoom> {
       setState(() {
         chatRoomsStream = snapshots;
         print(
-            "we got the data + ${chatRoomsStream.toString()} this is name  ${Constant.myName}");
+            "Nosotros tenemos los datos + ${chatRoomsStream.toString()} este es el nombre ${Constant.myName}");
       });
     });
   }
@@ -90,7 +89,7 @@ class _ChatRoomState extends State<ChatRoom> {
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
-  ChatRoomsTile(this.userName, this.chatRoomId);
+  ChatRoomsTile(this.userName, @required this.chatRoomId);
 
   @override
   Widget build(BuildContext context) {

@@ -20,9 +20,6 @@ class _Search_peopleState extends State<Search_people> {
   TextEditingController searchTextEditingController = new TextEditingController();
   QuerySnapshot searchSnapshot;
 
-  bool isLoading = false;
-  bool haveUserSearched = false;
-
 
   initiateSearch() async {
     AuthMethods().getUserByname(searchTextEditingController.text)
@@ -46,7 +43,6 @@ class _Search_peopleState extends State<Search_people> {
   //chatroom
   SednMenssaje(String userName){
 
-    if(userName != Constant.myName){
     List<String> users = [Constant.myName,userName];
 
     String chatRoomId = getChatRoomId(Constant.myName, userName);
@@ -60,10 +56,10 @@ class _Search_peopleState extends State<Search_people> {
 
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => ConversationScreen(
-        chatRoomId,
+        chatRoomId
       )
     ));
-    }
+    
   }
 
 
@@ -154,7 +150,7 @@ class _Search_peopleState extends State<Search_people> {
                             borderRadius: BorderRadius.circular(40)
                             ),
                         padding: EdgeInsets.all(12),
-                        child: Image.asset("asset/images/search_white.png", height: 25, width: 25,)),
+                        child: Image.asset("asset/search_white.png", height: 25, width: 25,)),
                   )
                 ],
               ),
