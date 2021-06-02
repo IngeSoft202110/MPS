@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mps/helpfunctions/sharedpref_help.dart';
 import 'package:mps/services/database.dart';
-import 'package:mps/views/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/homePartner.dart';

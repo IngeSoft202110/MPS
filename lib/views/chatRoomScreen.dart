@@ -35,7 +35,7 @@ class _ChatRoomState extends State<ChatRoom> {
             : Container();
       },
     );
-  }
+  } 
 
   @override
   void initState() {
@@ -106,15 +106,15 @@ class ChatRoomsTile extends StatelessWidget {
       },
       child: Container(
         color: Colors.black26,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Row(
           children: [
             Container(
-              height: 40,
-              width: 40,
+              height: 30,
+              width: 30,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(40)),
+                  color: Colors.blue, borderRadius: BorderRadius.circular(30)),
               child: Text(
                 "${userName.substring(0, 1).toUpperCase()}",
                 style: mediumTextStyle(),

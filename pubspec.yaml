@@ -19,7 +19,7 @@ dependencies:
   firebase_core: ^1.0.3
   firebase_storage: ^8.1.0
   google_sign_in:
-  shared_preferences:
+  shared_preferences: ^2.0.6
   random_string:
   cloud_firestore:
   geocoding:
