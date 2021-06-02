@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ParkingLots(),
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Managing Parking System',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
