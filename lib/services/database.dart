@@ -1,16 +1,20 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
 
 class DatabaseMethods {
+  //Add new user to the
   Future addUserInfoToDB(
       String userId, Map<String, dynamic> userInfoMap, String typeUser) async {
     //if (typeUser == 'cliente') {
@@ -97,8 +101,7 @@ class Queries {
     return li;
   }
 
-  Future<List<QueryDocumentSnapshot>> owner(
-          ) =>
+  Future<List<QueryDocumentSnapshot>> owner() =>
       FirebaseFirestore.instance.collection('parqueaderos').get()
           // ignore: missing_return
           .then((snapshot) async {
@@ -106,19 +109,20 @@ class Queries {
         String nombre;
         nombre = getNameUser();
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => vali(nombre,element['dueno'].toString())));
-        
+        lista.addAll(
+            docs.where((element) => vali(nombre, element['dueno'].toString())));
+
         return lista;
       });
 
-  bool vali(String nombre, String comparacion){
-
-    if(comparacion.compareTo(nombre) == 0){
+  bool vali(String nombre, String comparacion) {
+    if (comparacion.compareTo(nombre) == 0) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
+
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
@@ -148,11 +152,85 @@ void modifyComment(String value, Map data) async {
       .update({"comentarios": FieldValue.arrayUnion(comentarios)});
 }
 
+void addFavoriteParking(String value) async {
+  final FirebaseAuth currentUser = FirebaseAuth.instance;
+  final snapshot = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(currentUser.currentUser.uid)
+      .get();
+  List favorites = snapshot['favorites'];
+  favorites.add(value);
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser.currentUser.uid)
+      .update({"favorites": FieldValue.arrayUnion(favorites)});
+}
+
+void addVisitedParking(String value) async {
+  final FirebaseAuth currentUser = FirebaseAuth.instance;
+  final snapshot = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(currentUser.currentUser.uid)
+      .get();
+  List visited = snapshot['visited'];
+  visited.add(value);
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser.currentUser.uid)
+      .update({"visited": FieldValue.arrayUnion(visited)});
+}
+
+//Pal nombre del vato enchufado
 String getNameUser() {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userName = auth.currentUser.email.replaceAll("@gmail.com", "");
   print(userName);
   return userName;
+}
+
+//Pal correo del vato enchufado
+String getEmailUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userEmail = auth.currentUser.email;
+  print(userEmail);
+  return userEmail;
+}
+
+//Pa borrar al vato enchufado
+void deleteUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  print(auth.currentUser.displayName + " will be deleted");
+  auth.currentUser.delete();
+}
+
+//Pa la foto del username del vato enchufado
+String getPhotoURLUSer() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String photoURL = auth.currentUser.photoURL;
+  if (photoURL == null) {
+    photoURL = 'assets/Logo_Acron.png';
+  }
+  print(photoURL);
+  return photoURL;
+}
+
+//Pa el displayname  del vato enchufado
+String getDisplayNameUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String displayName = auth.currentUser.displayName;
+  if (displayName == null) {
+    displayName = getNameUser();
+  }
+  print(displayName);
+  return displayName;
+}
+
+//Pa actualizar el Email del vato enchufado
+void setEmailUser(String newEmail) {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  auth.currentUser.verifyBeforeUpdateEmail(newEmail);
+  print(newEmail);
 }
 
 //Add parkingLot and image to FirebaseStorage
@@ -173,4 +251,39 @@ Future uploadParkingLot(Map<String, dynamic> data) {
   } on FirebaseException catch (e) {
     return null;
   }
+}
+
+Future<List<QueryDocumentSnapshot>> snapshotsListFromUser(List<dynamic> ids) =>
+    FirebaseFirestore.instance
+        .collection('parqueaderos')
+        .get()
+        .then((snapshot) {
+      var docs = snapshot.docs;
+      List<QueryDocumentSnapshot> lista = [];
+      for (var doc in docs) {
+        for (int i = 0; i < ids.length; i++) {
+          if (ids[i] == doc.id) {
+            lista.add(doc);
+          }
+        }
+      }
+      return lista;
+    });
+
+Future<List<dynamic>> returningUserFavoriteParkingsLists() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userID = auth.currentUser.uid;
+  DocumentSnapshot snapshot =
+      await FirebaseFirestore.instance.collection("users").doc(userID).get();
+
+  //await FirebaseFirestore.instance.collection("users").doc(userID).get();
+  return snapshot['favorites'];
+}
+
+Future<List<dynamic>> returningUserVisitedParkingsLists() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userID = auth.currentUser.uid;
+  var snapshot =
+      await FirebaseFirestore.instance.collection("users").doc(userID).get();
+  return snapshot['visited'];
 }

@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/models/imageCarousel.dart';
 import 'package:mps/models/raiting.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
+
+import '../services/auth.dart';
 
 int _rating;
 String _coment;
@@ -21,6 +24,7 @@ class VisualizeParking extends StatefulWidget {
 
 class _VisualizeParkingState extends State<VisualizeParking> {
   String value;
+  bool favorite = false;
   DocumentSnapshot parkingLot;
   _VisualizeParkingState(this.value, this.parkingLot);
   var parking;
@@ -36,12 +40,41 @@ class _VisualizeParkingState extends State<VisualizeParking> {
     super.initState();
   }
 
+  _likePressed() {
+    setState(() {
+      favorite = !favorite;
+      parking = Queries().parkingLotById(value);
+      for (String i in parkingLot.data()["imagen"]) {
+        list.add(i);
+      }
+      addFavoriteParking(value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    addVisitedParking(value);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
         title: Text("Managing Parking System"),
+        actions: [
+          InkWell(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                            favorite
+                                ? Icons.favorite
+                                : Icons.favorite_border_outlined,
+                            color: favorite ? Colors.red : Colors.white),
+                        onPressed: () => _likePressed()),
+                  ],
+                )),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -171,22 +204,29 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                   ? Text("Has puntuado $_rating ",
                                       style: TextStyle(fontSize: 15))
                                   : SizedBox.shrink()),
-                          TextButton(
-                              child: Text("Publicar",
-                                  style: TextStyle(
-                                      color: Colors.black,
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all<TextStyle>(
+                                  TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15)),
-                              onPressed: () {
-                                var comentario = {
-                                  'comentario': _coment,
-                                  'estrellas': _rating.toString(),
-                                  'usuario': ''
-                                };
-                                modifyComment(value, comentario);
-                                parking = Queries().parkingLotById(
-                                    value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
-                              }),
+                                      fontSize: 25),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue[900]),
+                                alignment: Alignment.center),
+                            onPressed: () {
+                              var comentario = {
+                                'comentario': _coment,
+                                'estrellas': _rating.toString(),
+                                'usuario': ''
+                              };
+                              modifyComment(value, comentario);
+                              parking = Queries().parkingLotById(
+                                  value); //Esto hace que se refresque el dibujado de la querie de parqueaderos
+                            },
+                            child: Text("Publicar"),
+                          ),
                         ],
                       ),
                       Row(
