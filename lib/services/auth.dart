@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mps/helpfunctions/sharedpref_help.dart';
 import 'package:mps/services/database.dart';
-import 'package:mps/views/home.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/views/homePartner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +26,7 @@ class AuthMethods {
       print("error");
       throw e;
     }
-  } 
+  }
 
   Future signUpWithEmailAndPassword(BuildContext context, String email,
       String password, String name, String typeUser) async {
@@ -101,25 +100,20 @@ class AuthMethods {
         "profileUrl": userDetails.photoURL
       };
 
-
       DatabaseMethods()
           .addUserInfoToDB(userDetails.uid, userInfoMap, typeUser)
-          .then((value) {
+          .then((value) async {
         if (typeUser == 'cliente') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => HomeClient()));
         } else if (typeUser == 'socio') {
+          List<QueryDocumentSnapshot> lista = []; 
+              lista = await Queries().owner();
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePartner()));
+              context, MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
         }
       });
     }
-  }
-  
-  getUserByname(String username) async{
-    return await FirebaseFirestore.instance.collection("users")
-    .where("name", isEqualTo: username)
-    .get(); 
   }
 
   Future signOut() async {
@@ -127,54 +121,4 @@ class AuthMethods {
     prefs.clear();
     await auth.signOut();
   }
-
-  createChatRoom(String chatRoomId, chatRoomMap){
-    FirebaseFirestore.instance.collection("ChatRoom")
-    .doc(chatRoomId).set(chatRoomMap).catchError((e){
-      print(e.toString());
-    });
-  }
-
-  getUserByUserEmail(String userEmail) async{
-    return await FirebaseFirestore.instance.collection("users")
-    .where("email", isEqualTo: userEmail)
-    .get(); 
-  }
-
-  addConversationMenssages(String chatRoomId, menssageMap){
-    
-    FirebaseFirestore.instance.collection("ChatRoom")
-    .doc(chatRoomId)
-    .collection("chats")
-    .add(menssageMap).catchError((e){print(e.toString());});
-    
-  }
-
-  getConversationMenssages(String chatRoomId) async{
-
-    return await FirebaseFirestore.instance.collection("ChatRoom")
-    .doc(chatRoomId)
-    .collection("chats")
-    .orderBy("time", descending: false)
-    .snapshots();
-
-  }
-
-  getChatRooms(String userName) async{
-    return await FirebaseFirestore.instance.collection("ChatRoom")
-    .where("users", arrayContains: userName)
-    .snapshots();
-  }
-
-  Future<bool> addChatRoom(chatRoom, chatRoomId) {
-    FirebaseFirestore.instance
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .set(chatRoom)
-        .catchError((e) {
-      print(e);
-    });
-  }
-
-
 }

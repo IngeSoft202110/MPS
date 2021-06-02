@@ -10,21 +10,21 @@ int _rating;
 String _coment;
 var parking;
 
-class VisualizeParking extends StatefulWidget {
+class VisualizeParkingPartner extends StatefulWidget {
   final String value;
   final DocumentSnapshot parkingLot;
-  VisualizeParking(this.value, this.parkingLot);
+  VisualizeParkingPartner(this.value, this.parkingLot);
 
   @override
-  _VisualizeParkingState createState() =>
-      _VisualizeParkingState(value, parkingLot);
+  _VisualizeParkingPartnerState createState() =>
+      _VisualizeParkingPartnerState(value, parkingLot);
 }
 
-class _VisualizeParkingState extends State<VisualizeParking> {
+class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
   String value;
   bool favorite = false;
   DocumentSnapshot parkingLot;
-  _VisualizeParkingState(this.value, this.parkingLot);
+  _VisualizeParkingPartnerState(this.value, this.parkingLot);
   var parking;
   List<String> list = [];
   int cont = 0;

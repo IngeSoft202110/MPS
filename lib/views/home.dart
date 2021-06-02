@@ -9,6 +9,7 @@ import 'package:mps/views/userLogSign/signin.dart';
 
 import '../services/database.dart';
 import 'displayList.dart';
+import 'searchButton.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -115,7 +116,7 @@ class _HomeState extends State<Home> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),
                             child: GestureDetector(
-                              child: Text("Cercanía"),
+                              child: Text("Near by"),
                               onTap: () {
                                 //Navigator.pushReplacement(
                                 //  context,

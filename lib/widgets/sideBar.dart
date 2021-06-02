@@ -1,10 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mps/services/database.dart';
 import 'package:mps/views/addParkingLot.dart';
+import 'package:mps/views/homePartner.dart';
 
 class SideBar extends StatelessWidget {
+  
+  
+
   const SideBar({
     Key key,
   }) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +43,12 @@ class SideBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.local_parking),
             title: Text("Ver parqueaderos"),
-            onTap: () {},
+            onTap: () async {
+              List<QueryDocumentSnapshot> lista = []; 
+              lista = await Queries().owner();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
+            },
           ),
           ListTile(
             leading: Icon(Icons.add_location),

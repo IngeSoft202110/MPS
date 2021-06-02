@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 ///Registros
 
 class DatabaseMethods {
+  //Add new user to the
   Future addUserInfoToDB(
       String userId, Map<String, dynamic> userInfoMap, String typeUser) async {
     //if (typeUser == 'cliente') {
@@ -97,9 +98,28 @@ class Queries {
     return li;
   }
 
-  //search by Ranking
-  //buenas
+  Future<List<QueryDocumentSnapshot>> owner(
+          ) =>
+      FirebaseFirestore.instance.collection('parqueaderos').get()
+          // ignore: missing_return
+          .then((snapshot) async {
+        var docs = snapshot.docs;
+        String nombre;
+        nombre = getNameUser();
+        List<QueryDocumentSnapshot> lista = [];
+        lista.addAll(docs.where((element) => vali(nombre,element['dueno'].toString())));
+        
+        return lista;
+      });
 
+  bool vali(String nombre, String comparacion){
+
+    if(comparacion.compareTo(nombre) == 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
@@ -129,6 +149,7 @@ void modifyComment(String value, Map data) async {
       .update({"comentarios": FieldValue.arrayUnion(comentarios)});
 }
 
+//Pal nombre del vato enchufado
 String getNameUser() {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userName = auth.currentUser.email.replaceAll("@gmail.com", "");
@@ -136,6 +157,49 @@ String getNameUser() {
   return userName;
 }
 
+//Pal correo del vato enchufado
+String getEmailUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userEmail = auth.currentUser.email;
+  print(userEmail);
+  return userEmail;
+}
+
+//Pa borrar al vato enchufado
+void deleteUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  print(auth.currentUser.displayName + " will be deleted");
+  auth.currentUser.delete();
+}
+
+//Pa la foto del username del vato enchufado
+String getPhotoURLUSer() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String photoURL = auth.currentUser.photoURL;
+  if (photoURL == null) {
+    photoURL = 'assets/Logo_Acron.png';
+  }
+  print(photoURL);
+  return photoURL;
+}
+
+//Pa el displayname  del vato enchufado
+String getDisplayNameUser() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String displayName = auth.currentUser.displayName;
+  if (displayName == null) {
+    displayName = getNameUser();
+  }
+  print(displayName);
+  return displayName;
+}
+
+//Pa actualizar el Email del vato enchufado
+void setEmailUser(String newEmail) {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  auth.currentUser.verifyBeforeUpdateEmail(newEmail);
+  print(newEmail);
+}
 
 //Add parkingLot and image to FirebaseStorage
 class FirebaseUpload {
