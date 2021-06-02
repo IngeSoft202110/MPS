@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 ////////******************////////////////*** */ */
 ///Registros
@@ -98,8 +101,7 @@ class Queries {
     return li;
   }
 
-  Future<List<QueryDocumentSnapshot>> owner(
-          ) =>
+  Future<List<QueryDocumentSnapshot>> owner() =>
       FirebaseFirestore.instance.collection('parqueaderos').get()
           // ignore: missing_return
           .then((snapshot) async {
@@ -107,19 +109,20 @@ class Queries {
         String nombre;
         nombre = getNameUser();
         List<QueryDocumentSnapshot> lista = [];
-        lista.addAll(docs.where((element) => vali(nombre,element['dueno'].toString())));
-        
+        lista.addAll(
+            docs.where((element) => vali(nombre, element['dueno'].toString())));
+
         return lista;
       });
 
-  bool vali(String nombre, String comparacion){
-
-    if(comparacion.compareTo(nombre) == 0){
+  bool vali(String nombre, String comparacion) {
+    if (comparacion.compareTo(nombre) == 0) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
+
   //Return all documents in collection
   Stream<QuerySnapshot> allDocuments() {
     var temp =
@@ -147,6 +150,35 @@ void modifyComment(String value, Map data) async {
       .collection('parqueaderos')
       .doc(value)
       .update({"comentarios": FieldValue.arrayUnion(comentarios)});
+}
+
+void addFavoriteParking(String value) async {
+  final FirebaseAuth currentUser = FirebaseAuth.instance;
+  final snapshot = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(currentUser.currentUser.uid)
+      .get();
+  List favorites = snapshot['favorites'];
+  favorites.add(value);
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser.currentUser.uid)
+      .update({"favorites": FieldValue.arrayUnion(favorites)});
+}
+
+void addVisitedParking(String value) async {
+  final FirebaseAuth currentUser = FirebaseAuth.instance;
+  final snapshot = await FirebaseFirestore.instance
+      .collection("users")
+      .doc(currentUser.currentUser.uid)
+      .get();
+  List visited = snapshot['visited'];
+  visited.add(value);
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser.currentUser.uid)
+      .update({"visited": FieldValue.arrayUnion(visited)});
 }
 
 //Pal nombre del vato enchufado
@@ -219,4 +251,39 @@ Future uploadParkingLot(Map<String, dynamic> data) {
   } on FirebaseException catch (e) {
     return null;
   }
+}
+
+Future<List<QueryDocumentSnapshot>> snapshotsListFromUser(List<dynamic> ids) =>
+    FirebaseFirestore.instance
+        .collection('parqueaderos')
+        .get()
+        .then((snapshot) {
+      var docs = snapshot.docs;
+      List<QueryDocumentSnapshot> lista = [];
+      for (var doc in docs) {
+        for (int i = 0; i < ids.length; i++) {
+          if (ids[i] == doc.id) {
+            lista.add(doc);
+          }
+        }
+      }
+      return lista;
+    });
+
+Future<List<dynamic>> returningUserFavoriteParkingsLists() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userID = auth.currentUser.uid;
+  DocumentSnapshot snapshot =
+      await FirebaseFirestore.instance.collection("users").doc(userID).get();
+
+  //await FirebaseFirestore.instance.collection("users").doc(userID).get();
+  return snapshot['favorites'];
+}
+
+Future<List<dynamic>> returningUserVisitedParkingsLists() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String userID = auth.currentUser.uid;
+  var snapshot =
+      await FirebaseFirestore.instance.collection("users").doc(userID).get();
+  return snapshot['visited'];
 }

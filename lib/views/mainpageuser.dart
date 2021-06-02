@@ -1,10 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/views/favorites.dart';
 import 'package:mps/views/history.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/services/database.dart';
 import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import '../services/database.dart';
+import 'homeClient.dart';
 import 'userLogSign/formUser.dart';
 
 class MainPageUser extends StatefulWidget {
@@ -14,10 +24,9 @@ class MainPageUser extends StatefulWidget {
 
 class _MainPageUserState extends State<MainPageUser> {
   String newUsername, newEmail;
-  final _newUsernameCon = new TextEditingController();
-  final _newEmailCon = new TextEditingController();
-  List<DocumentSnapshot> lista;
+  List<DocumentSnapshot> lista = [];
   Key key;
+
   //User user = AuthMethods().getCurrentUser();
   @override
   Widget build(BuildContext context) {
@@ -38,21 +47,29 @@ class _MainPageUserState extends State<MainPageUser> {
                     children: [
                       IconButton(
                           icon: Icon(Icons.favorite),
-                          onPressed: () {
+                          onPressed: () async {
+                            List<QueryDocumentSnapshot> favoritos = [];
+                            var ids = [];
+                            ids = await returningUserFavoriteParkingsLists();
+                            favoritos = await snapshotsListFromUser(ids);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        FavoritesList(lista: [])));
+                                        FavoritesList(lista: favoritos)));
                           }),
                       IconButton(
                           icon: Icon(Icons.history),
-                          onPressed: () {
+                          onPressed: () async {
+                            List<DocumentSnapshot> visitados = [];
+                            var ids = [];
+                            ids = await returningUserVisitedParkingsLists();
+                            visitados = await snapshotsListFromUser(ids);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        HistoryList(lista: [])));
+                                        HistoryList(lista: visitados)));
                           })
                     ],
                   )),
@@ -95,37 +112,6 @@ class _MainPageUserState extends State<MainPageUser> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
-                      //Aca va el boton para actualizar los datos del usuario
-                      /*ElevatedButton(
-                    style: ButtonStyle(
-                        textStyle: MaterialStateProperty.all<TextStyle>(
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                        ),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue[900]),
-                        alignment: Alignment.center),
-                    onPressed: () {
-                      setState(() {
-                        newUsername = _newUsernameCon.text;
-                        newEmail = _newEmailCon.text;
-                        if (newUsername != null || newUsername == "") {
-                          setEmailUser(newUsername);
-                        }
-                        if (newEmail != null || newEmail == "") {
-                          try {
-                            setEmailUser(newEmail);
-                          } on PlatformException catch (e) {
-                            showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    ErrorDialog("Error", "Email no válido"));
-                          }
-                        }
-                      });
-                    },
-                    child: Text("Actualizar Datos"),
-                  ),
-                  Text("New Username: $newUsername \n New Email: $newEmail")*/
                       ElevatedButton(
                         style: ButtonStyle(
                             textStyle: MaterialStateProperty.all<TextStyle>(

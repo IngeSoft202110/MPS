@@ -81,7 +81,6 @@ class AuthMethods {
     final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken);
-
     UserCredential result =
         await _firebaseAuth.signInWithCredential(credential);
 
