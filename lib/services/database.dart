@@ -136,6 +136,7 @@ String getNameUser() {
   return userName;
 }
 
+
 //Add parkingLot and image to FirebaseStorage
 class FirebaseUpload {
   static UploadTask uploadFile(String destination, File file) {
