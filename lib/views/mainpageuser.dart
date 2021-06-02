@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mps/views/favorites.dart';
+import 'package:mps/views/history.dart';
 import 'package:mps/views/homeClient.dart';
 import 'package:mps/services/database.dart';
 import '../services/database.dart';
@@ -44,6 +45,15 @@ class _MainPageUserState extends State<MainPageUser> {
                                     builder: (context) =>
                                         FavoritesList(lista: [])));
                           }),
+                      IconButton(
+                          icon: Icon(Icons.history),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        HistoryList(lista: [])));
+                          })
                     ],
                   )),
             )
@@ -132,7 +142,7 @@ class _MainPageUserState extends State<MainPageUser> {
                               MaterialPageRoute(
                                   builder: (context) => FormUser()));
                         },
-                        child: Text("Borrar Cuenta"),
+                        child: Text("Delete Account"),
                       ),
                     ],
                   ),
