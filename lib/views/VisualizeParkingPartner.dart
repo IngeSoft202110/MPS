@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mps/models/imageCarousel.dart';
 import 'package:mps/models/raiting.dart';
 import 'package:mps/services/database.dart';
+import 'package:mps/views/ModifyParkingLot%20.dart';
 import 'package:mps/views/showRoute.dart';
 import 'package:mps/widgets/sideBar.dart';
 
@@ -304,10 +305,10 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                                     )),
                               ),
                               onTap: () async {
-                                List<QueryDocumentSnapshot> lista = []; 
-                                lista = await Queries().owner();
+                               // List<QueryDocumentSnapshot> lista = []; 
+                                //lista = await Queries().owner();
                                 Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
+                                MaterialPageRoute(builder: (context) => ModifyParkingLot(value)));
                               },
                             ),
                           ),

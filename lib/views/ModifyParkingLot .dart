@@ -1,6 +1,7 @@
 //import 'dart:js_util';
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mps/services/database.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:mps/models/parkingLot.dart';
 import 'package:mps/widgets/buttonWidget.dart';
 import 'package:mps/widgets/sideBar.dart';
+
+import 'homePartner.dart';
 
 class ModifyParkingLot extends StatefulWidget {
   final String value;
@@ -21,68 +24,64 @@ class ModifyParkingLot extends StatefulWidget {
 class _ModifyParkingLotState extends State<ModifyParkingLot> {
   String value;
   File file;
-  ParkingLot parking = new ParkingLot();
-  String priceCar, priceBike;
-  int score;
+  
+  String priceCar, priceBike, nombre, direccion, descripcion;
+  //int score;
   List images = [];
   final _formKey = GlobalKey<FormState>();
 
-  _ModifyParkingLotState(String value);
+  _ModifyParkingLotState(this.value);
+
+  var parking;
+
+  @override
+  void initState() {
+
+    parking = Queries().parkingLotById(value);
+
+    super.initState();
+  
+  }
+  getNombre(BuildContext context) async {
+    FirebaseFirestore.instance.collection('parqueaderos').doc(value).update({
+          "nombre": nombre
+        });
+  }
+
+  getDireccion(BuildContext context) async {
+    FirebaseFirestore.instance.collection('parqueaderos').doc(value).update({
+          "direccion": direccion
+        });
+  }
+
+  getDescripcion(BuildContext context) async {
+    FirebaseFirestore.instance.collection('parqueaderos').doc(value).update({
+          "descripcion": descripcion
+        });
+  }
 
   addParking(BuildContext context) async {
-    if (_formKey.currentState.validate() && file != null) {
-      final filename = basename(file.path);
-      final destination = 'Images/$filename';
-      UploadTask url;
-
-      url = FirebaseUpload.uploadFile(destination, file);
-      if (url != null) {
-        final snapshot = await url.whenComplete(() {});
-        final urlImage = await snapshot.ref.getDownloadURL();
-        images.add(urlImage);
-        var comentario = {'comentario': "", 'estrellas': "", 'usuario': ''};
-        List comments = [];
-        comments.add(comentario);
+    
 
         Map<String, dynamic> price = {"carro": priceCar, "moto": priceBike};
-        Map<String, dynamic> data = {
-          "nombre": parking.getName(),
-          "direccion": parking.getAddress(),
-          "descripcion": parking.getDescription(),
-          "comentarios": comments,
-          "imagen": images,
-          "puntaje": score.toString(),
-          "precio": price,
-          "dueno": getNameUser()
-        };
-        /*if (modifyParkingLot(data,value) != null) {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: Text("Parqueadero agregado correctamente"),
-                  ),
-              barrierDismissible: true);
-          _formKey.currentState.reset();
-        }*/
-
-          // showDialog(
-          //   context: context,
-          //   builder: (_) => new CupertinoAlertDialog(
-          //     title: new Text("Registro realizado"),
-          //     content: new Text("Se ha registrado el parqueadero correctamente"),
-          //     actions: <Widget>[
-          //       TextButton(
-          //         child: Text('Close me!'),
-          //         onPressed: () {
-          //           Navigator.of(context).pop();
-          //         },
-          //       )
-          //     ],
-          //   ),
-          // );
         
-      }
-    }
+        DocumentSnapshot d = FirebaseFirestore.instance.collection('parqueaderos').doc(value).get() as DocumentSnapshot;
+        
+        if(nombre == null){
+          nombre = d['nombre'].toString();
+          print(nombre);
+        }        
+
+        if(direccion == null){
+          direccion = d['direccion'].toString();
+          print(direccion);
+        }
+        
+        
+        FirebaseFirestore.instance.collection('parqueaderos').doc(value).update({
+          "precio": price
+        });
+        
   }
 
   @override
@@ -108,30 +107,32 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                   height: 120,
                 ),
                 TextFormField(
-                  validator: (val) {
+                  /*validator: (val) {
                     return val.isEmpty ? "Ingrese nombre" : null;
-                  },
-                  decoration: InputDecoration(hintText: "Name"),
+                  },*/
+                  decoration: InputDecoration(hintText: "Nombre"),
                   onChanged: (val) {
-                    parking.setName(val);
+                    nombre = val;
                   },
                 ),
                 TextFormField(
-                  validator: (val) {
+                  /*validator: (val) {
                     return val.isEmpty ? "Ingrese la dirección" : null;
-                  },
-                  decoration: InputDecoration(hintText: "Address"),
+                  },*/
+                  
+                  decoration: InputDecoration(hintText: "Direccion"),
                   onChanged: (val) {
-                    parking.setAddress(val);
+                    direccion = val;
+                    
                   },
                 ),
                 TextFormField(
-                  validator: (val) {
+                  /*validator: (val) {
                     return val.isEmpty ? "Ingrese la descripción" : null;
-                  },
-                  decoration: InputDecoration(hintText: "Description"),
+                  },*/
+                  decoration: InputDecoration(hintText: "Descripcion"),
                   onChanged: (val) {
-                    parking.setDescription(val);
+                    descripcion = val;
                   },
                 ),
                 SizedBox(
@@ -143,7 +144,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                   onClicked: selectFile,
                 ),
                 Text(filename),
-                TextFormField(
+                /*TextFormField(
                   validator: (val) {
                     return val.isEmpty ? "Ingrese la puntuación" : null;
                   },
@@ -151,24 +152,24 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                   onChanged: (val) {
                     score = int.parse(val);
                   },
-                ),
+                ),*/
                 TextFormField(
-                  validator: (val) {
+                  /*validator: (val) {
                     return val.isEmpty
                         ? "Ingrese el precio para automóvil"
                         : null;
-                  },
+                  },*/
                   decoration: InputDecoration(hintText: "Price Car"),
                   onChanged: (val) {
                     priceCar = val;
                   },
                 ),
                 TextFormField(
-                  validator: (val) {
+                  /*validator: (val) {
                     return val.isEmpty
                         ? "Ingrese el precio para motocicleta"
                         : null;
-                  },
+                  },*/
                   decoration: InputDecoration(hintText: "Price Motorbike"),
                   onChanged: (val) {
                     priceBike = val;
@@ -178,8 +179,12 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                   height: 25,
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     addParking(context);
+                    List<QueryDocumentSnapshot> lista = []; 
+                                lista = await Queries().owner();
+                                Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -188,7 +193,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text(
-                      "Añadir parqueadero",
+                      "Modificar Parqueadero",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white,

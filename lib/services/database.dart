@@ -220,11 +220,10 @@ Future uploadParkingLot(Map<String, dynamic> data) {
     return null;
   }
 
-  Future modifyParkingLot(Map<String, dynamic> data,String id) {
-    try {
-      return FirebaseFirestore.instance.collection('parqueaderos').doc(id).set(data);
-    } on FirebaseException catch (e) {
-      return null;
-    }
-  }
+  /*void modifyParkingLot(Map<String, dynamic> data,String id) {
+    
+       FirebaseFirestore.instance.collection('parqueaderos').doc(id).set(data);
+       Firebaser
+    
+  }*/
 }
