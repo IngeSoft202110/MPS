@@ -84,21 +84,6 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                           ]),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 30)),
-                          Text(
-                            "Compartir parqueadero",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Icon(Icons.link)
-                        ],
-                      ),
                       ImageCarousel(list),
                       Padding(
                         padding:
