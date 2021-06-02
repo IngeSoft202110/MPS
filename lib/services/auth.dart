@@ -88,11 +88,6 @@ class AuthMethods {
     User userDetails = result.user;
 
     if (result != null) {
-      SharedPreferenceHelp().saveUserEmail(userDetails.email);
-      SharedPreferenceHelp().saveUserId(userDetails.uid);
-      SharedPreferenceHelp().saveDisplayName(userDetails.displayName);
-      SharedPreferenceHelp().saveUserProfileUrl(userDetails.photoURL);
-
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
         "username": userDetails.email.replaceAll("@gmail.com", ""),
