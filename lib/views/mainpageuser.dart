@@ -25,7 +25,7 @@ class _MainPageUserState extends State<MainPageUser> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pushReplacement(
+            onPressed: () => Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomeClient())),
           ),
           backgroundColor: Colors.blue[900],
@@ -39,7 +39,7 @@ class _MainPageUserState extends State<MainPageUser> {
                       IconButton(
                           icon: Icon(Icons.favorite),
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
@@ -48,7 +48,7 @@ class _MainPageUserState extends State<MainPageUser> {
                       IconButton(
                           icon: Icon(Icons.history),
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
@@ -137,7 +137,7 @@ class _MainPageUserState extends State<MainPageUser> {
                             alignment: Alignment.center),
                         onPressed: () {
                           deleteUser();
-                          Navigator.pushReplacement(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FormUser()));

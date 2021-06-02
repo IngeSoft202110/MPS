@@ -45,8 +45,7 @@ class _VisualizeParkingState extends State<VisualizeParking> {
       for (String i in parkingLot.data()["imagen"]) {
         list.add(i);
       }
-      /*final FirebaseAuth auth = FirebaseAuth.instance;
-      String userID = auth.currentUser.uid;
+      /*String userID = getCurrentUser();
       FirebaseFirestore.instance
           .collection("users")
           .doc(userID)
