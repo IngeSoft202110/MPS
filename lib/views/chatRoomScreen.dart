@@ -74,9 +74,7 @@ class _ChatRoomState extends State<ChatRoom> {
           ),
         ],
       ),
-      body: Container(
-        child: ChatRoomList()
-        ),
+      body: Container(child: ChatRoomList()),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
@@ -100,7 +98,9 @@ class ChatRoomsTile extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ConversationScreen(chatRoomId)));
+                builder: (context) => ConversationScreen(
+                      chatRoomId,
+                    )));
       },
       child: Container(
         color: Colors.black26,
