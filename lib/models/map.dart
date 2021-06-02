@@ -7,6 +7,7 @@ import 'package:mps/models/parkingLots.dart';
 import 'package:mps/services/database.dart';
 import 'package:geocoding_platform_interface/geocoding_platform_interface.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
+import 'package:mps/views/visualizeparking.dart';
 import 'package:provider/provider.dart';
 
 class Map extends StatefulWidget {
@@ -278,14 +279,19 @@ class _Map extends State<Map> {
   //Set red markers for nearby parkinglots
   void markers(LatLng latsLongs, DocumentSnapshot place) {
     print(latsLongs);
-    myMarker.add(
-      Marker(
-          markerId: MarkerId(latsLongs.toString()),
-          position: latsLongs,
-          infoWindow: InfoWindow(
+    myMarker.add(Marker(
+        markerId: MarkerId(latsLongs.toString()),
+        position: latsLongs,
+        infoWindow: InfoWindow(
             title: place.data()["nombre"],
             snippet: place.data()["direccion"],
-          )),
-    );
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VisualizeParking(place.id, place),
+                ),
+              );
+            })));
   }
 }
