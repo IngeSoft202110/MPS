@@ -2,6 +2,7 @@ class ParkingLot {
   String name;
   String address;
   String description;
+  String dueno;
   double score;
   String image;
   Map<String, double> price;
@@ -29,6 +30,14 @@ class ParkingLot {
 
   void setDescription(String description) {
     this.description = description;
+  }
+
+  String getDueno() {
+    return name;
+  }
+
+  void setDueno(String name) {
+    this.name = name;
   }
 
   String getImage() {
