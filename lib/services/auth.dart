@@ -36,11 +36,16 @@ class AuthMethods {
       //await auth.signInWithEmailAndPassword(email: email, password: password);
       User userDetails = userCredential.user;
 
+      List favorite = [];
+      List visited = [];
+
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
-        "username": userDetails.email.replaceAll("@gmail.com", ""),
+        "username": userDetails.email.split("@")[0],
         "name": name,
-        "profileUrl": userDetails.photoURL
+        "profileUrl": userDetails.photoURL,
+        "favorites": favorite,
+        "visited": visited
       };
 
       DatabaseMethods()
@@ -85,13 +90,17 @@ class AuthMethods {
         await _firebaseAuth.signInWithCredential(credential);
 
     User userDetails = result.user;
+    List favorite = [];
+    List visited = [];
 
     if (result != null) {
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
         "username": userDetails.email.replaceAll("@gmail.com", ""),
         "name": userDetails.displayName,
-        "profileUrl": userDetails.photoURL
+        "profileUrl": userDetails.photoURL,
+        "favorites": favorite,
+        "visited": visited
       };
 
       DatabaseMethods()
