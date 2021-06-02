@@ -107,10 +107,12 @@ class AuthMethods {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => HomeClient()));
         } else if (typeUser == 'socio') {
-          List<QueryDocumentSnapshot> lista = []; 
-              lista = await Queries().owner();
+          List<QueryDocumentSnapshot> lista = [];
+          lista = await Queries().owner();
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePartner(lista: lista)));
         }
       });
     }
