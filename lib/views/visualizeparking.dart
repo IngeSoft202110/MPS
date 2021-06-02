@@ -6,6 +6,8 @@ import 'package:mps/models/raiting.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
 
+import '../services/auth.dart';
+
 int _rating;
 String _coment;
 var parking;
@@ -45,18 +47,13 @@ class _VisualizeParkingState extends State<VisualizeParking> {
       for (String i in parkingLot.data()["imagen"]) {
         list.add(i);
       }
-      /*final FirebaseAuth auth = FirebaseAuth.instance;
-      String userID = auth.currentUser.uid;
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(userID)
-          .collection("favorites")
-          .add();*/
+      addFavoriteParking(value);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    addVisitedParking(value);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
@@ -118,21 +115,6 @@ class _VisualizeParkingState extends State<VisualizeParking> {
                                   color: Colors.grey),
                             )
                           ]),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 30)),
-                          Text(
-                            "Compartir parqueadero",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Icon(Icons.link)
                         ],
                       ),
                       ImageCarousel(list),

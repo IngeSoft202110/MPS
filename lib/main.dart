@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ParkingLots(),
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Managing Parking System',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -26,11 +26,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
               future: AuthMethods().getCurrentUser(),
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  return HomeClient();
-                } else {
-                  return SelectUser();
-                }
+                return SelectUser();
               })),
     );
   }

@@ -87,7 +87,7 @@ class _Buttons extends State<SearchParkingButtons> {
           ),
         ),
         GestureDetector(
-          child: button('assets/brocha.jpg'),
+          child: button('assets/cleanBrush.png'),
           onTap: () {
             if ((parkingList.initlist != null) &&
                 (parkingList.notNull(parkingList.initlist))) {

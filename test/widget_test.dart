@@ -5,26 +5,90 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mockito/mockito.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
 
 import 'package:mps/main.dart';
+import 'package:mps/searchFunctions/searchParkingButtons.dart';
+import 'package:mps/views/addParkingLot.dart';
+import 'package:mps/views/errorDialog.dart';
+import 'package:mps/views/userLogSign/formUser.dart';
+import 'package:mps/views/userLogSign/signin.dart';
+import 'package:mps/views/visualizeparking.dart';
+import 'package:mps/widgets/sideBar.dart';
 
+class FirebaseAuthMock extends Mock implements FirebaseAuth {}
+
+class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
+
+class MockQueryDocumentSnapshot extends Mock implements QueryDocumentSnapshot {}
+
+@GenerateMocks([http.Client])
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Add parkinglot: TextField avaible', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: AddParkingLot()));
+    var textField = find.byType(TextFormField);
+    expect(textField, findsWidgets);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Add parkinglot: Add Button avaible',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: AddParkingLot()));
+    var button = find.text("Añadir parqueadero");
+    expect(button, findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Error Dialog: Funtioning dialog', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: ErrorDialog("Error", "Dialog")));
+    final titleFinder = find.text("Error");
+    final messageFinder = find.text("Dialog");
+    expect(titleFinder, findsOneWidget);
+    expect(messageFinder, findsOneWidget);
+  });
+
+  testWidgets('SideBar: ExistSidebar partner', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: SideBar()));
+
+    //Ver parqueaderos
+    final titleFinder = find.text("Ver parqueaderos");
+    expect(titleFinder, findsOneWidget);
+
+    //Perfil
+    final perfil = find.text("Perfil");
+    expect(perfil, findsOneWidget);
+
+    //Añadir parqueaderos
+    final addParking = find.text("Agregar parqueadero");
+    expect(addParking, findsOneWidget);
+
+    //Icons location
+    final icono = find.byIcon(Icons.add_location);
+    expect(icono, findsOneWidget);
+
+    //Icons parking
+    final iconoParking = find.byIcon(Icons.local_parking);
+    expect(iconoParking, findsOneWidget);
+
+    //Icon to fail
+    final iconoFail = find.byIcon(Icons.backpack);
+    expect(iconoFail, findsNothing);
+  });
+
+  testWidgets('Buttons enabeled: SearchParkingButtons',
+      (WidgetTester tester) async {
+    List<MockQueryDocumentSnapshot> doc;
+    await tester.pumpWidget(MaterialApp(home: SearchParkingButtons(doc)));
+    final titleFinder = find.byWidget(button("image"));
+    expect(titleFinder, findsNothing);
   });
 }
