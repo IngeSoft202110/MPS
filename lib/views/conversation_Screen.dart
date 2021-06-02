@@ -114,8 +114,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 borderRadius: BorderRadius.circular(40)),
                             padding: EdgeInsets.all(12),
                             child:
-                                Image.asset("asset/send.png")),
-                      ),
+                                Image.asset("assets/send.png")),
+                      )
                     ],
                   ),
                 ),

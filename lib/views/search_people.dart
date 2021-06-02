@@ -29,15 +29,25 @@ class _Search_peopleState extends State<Search_people> {
   }
 
   Widget searchL() {
+
    return searchSnapshot != null ? ListView.builder(
+
       itemCount: searchSnapshot.docs.length,  
+
       shrinkWrap: true,
+
         itemBuilder: (context, index){
+
         return userTile(
+
           searchSnapshot.docs[index].get("userName"),
-          searchSnapshot.docs[index].get("userName"),
+
+          searchSnapshot.docs[index].get("email"),
+
         );
+
         }) : Container();
+
   }
 
   //chatroom
@@ -122,17 +132,17 @@ class _Search_peopleState extends State<Search_people> {
         child: Column(
           children: [
             Container(
-              color: Color(0x54FFFFFF),
+              color: Color(0x5400FFFF),
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Expanded(
                       child: TextField(
                     controller: searchTextEditingController,
-                    style: TextStyle(color: Colors.white54),
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                         hintText: "Busca el Username del usuario ...",
-                        hintStyle: TextStyle(color: Colors.white54),
+                        hintStyle: TextStyle(color: Colors.blue),
                         border: InputBorder.none),
                   )),
                   GestureDetector(
@@ -144,13 +154,14 @@ class _Search_peopleState extends State<Search_people> {
                         width: 40,
                         decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                              const Color(0x36FFFFFF),
-                              const Color(0x0FFFFFFF)
+                              const Color(0x3600FFFF),
+                              const Color(0x0F00FFFF)
                             ]),
                             borderRadius: BorderRadius.circular(40)
                             ),
                         padding: EdgeInsets.all(12),
-                        child: Image.asset("asset/search_white.png", height: 25, width: 25,)),
+                        child: Image(image: AssetImage('assets/search_white.png')),
+                        ),
                   )
                 ],
               ),
