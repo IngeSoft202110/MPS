@@ -65,9 +65,9 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
 
         Map<String, dynamic> price = {"carro": priceCar, "moto": priceBike};
         
-        DocumentSnapshot d = FirebaseFirestore.instance.collection('parqueaderos').doc(value).get() as DocumentSnapshot;
+        ///DocumentSnapshot d = FirebaseFirestore.instance.collection('parqueaderos').doc(value).get() as DocumentSnapshot;
         
-        if(nombre == null){
+        /*if(nombre == null){
           nombre = d['nombre'].toString();
           print(nombre);
         }        
@@ -75,11 +75,14 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
         if(direccion == null){
           direccion = d['direccion'].toString();
           print(direccion);
-        }
+        }*/
         
         
         FirebaseFirestore.instance.collection('parqueaderos').doc(value).update({
-          "precio": price
+          "precio": price,
+          //"nombre": nombre,
+          //"direccion": direccion,
+          //"descripcion": descripcion
         });
         
   }
@@ -93,7 +96,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
       appBar: AppBar(
         //automaticallyImplyLeading: false,
         backgroundColor: Colors.blue[900],
-        title: Text("Add Parkinglot"),
+        title: Text("Modificar Parqueadero"),
       ),
       drawer: SideBar(),
       body: SingleChildScrollView(
@@ -115,6 +118,29 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                     nombre = val;
                   },
                 ),
+                GestureDetector(
+                  onTap: () async {
+                    getNombre(context);
+                    /*List<QueryDocumentSnapshot> lista = []; 
+                                lista = await Queries().owner();
+                                Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));*/
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.indigo[300],
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Text(
+                      "Cambiar",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
                 TextFormField(
                   /*validator: (val) {
                     return val.isEmpty ? "Ingrese la dirección" : null;
@@ -126,6 +152,29 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                     
                   },
                 ),
+                GestureDetector(
+                  onTap: () async {
+                    getDireccion(context);
+                    /*List<QueryDocumentSnapshot> lista = []; 
+                                lista = await Queries().owner();
+                                Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));*/
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.indigo[300],
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Text(
+                      "Cambiar",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
                 TextFormField(
                   /*validator: (val) {
                     return val.isEmpty ? "Ingrese la descripción" : null;
@@ -135,15 +184,38 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                     descripcion = val;
                   },
                 ),
+                GestureDetector(
+                  onTap: () async {
+                    getDescripcion(context);
+                    /*List<QueryDocumentSnapshot> lista = []; 
+                                lista = await Queries().owner();
+                                Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));*/
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.indigo[300],
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Text(
+                      "Cambiar",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 10,
                 ),
-                ButtonWidget(
+                /*ButtonWidget(
                   text: 'Select file',
                   icon: Icons.attach_file,
                   onClicked: selectFile,
                 ),
-                Text(filename),
+                Text(filename),*/
                 /*TextFormField(
                   validator: (val) {
                     return val.isEmpty ? "Ingrese la puntuación" : null;
@@ -193,7 +265,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text(
-                      "Modificar Parqueadero",
+                      "Cambiar",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white,
