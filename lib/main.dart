@@ -26,11 +26,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
               future: AuthMethods().getCurrentUser(),
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  return HomeClient();
-                } else {
-                  return SelectUser();
-                }
+                return SelectUser();
               })),
     );
   }
