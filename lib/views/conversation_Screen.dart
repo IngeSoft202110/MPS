@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_webservice/directions.dart';
 import 'package:mps/helpfunctions/constant.dart';
@@ -8,7 +9,7 @@ import 'package:mps/views/widget_chat.dart';
 
 class ConversationScreen extends StatefulWidget {
   
-  String chatRoomId;
+  final String chatRoomId;
   ConversationScreen (this.chatRoomId);
 
   @override
@@ -19,7 +20,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   TextEditingController menssageController = new TextEditingController();
 
-  Stream chatMenssagesStream;
+  Stream<QuerySnapshot> chatMenssagesStream;
   
   Widget ChatMenssageList(){
 
@@ -41,11 +42,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if(menssageController.text.isNotEmpty){
       Map<String, dynamic> mensageMap = {
       "mensaje" : menssageController.text,
-      "sendBy" : Constant.myName
-      //S"time" : DateTime.now().millisecondsSinceEpoch,
+      "sendBy" : Constant.myName,
+      "time" : DateTime.now().millisecondsSinceEpoch  
       };
+
       AuthMethods().addConversationMenssages(widget.chatRoomId, mensageMap);
-      menssageController.text = "";
+      
+      setState(() {
+       menssageController.text = "";
+      });
     }
 
   }

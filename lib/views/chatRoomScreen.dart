@@ -45,9 +45,10 @@ class _ChatRoomState extends State<ChatRoom> {
 
   getUserInfo() async{
     Constant.myName = await SharedPreferenceHelp().getUserName();
-    AuthMethods().getChatRooms(Constant.myName).then((value){
+    AuthMethods().getChatRooms(Constant.myName).then((snapshots){
       setState(() {
-        chatRoomsStream = value;
+        chatRoomsStream = snapshots;
+        print("we got the data + ${chatRoomsStream.toString()} this is name  ${Constant.myName}");
       });
     });
 
