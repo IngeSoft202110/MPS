@@ -12,17 +12,22 @@ import 'package:mps/widgets/buttonWidget.dart';
 import 'package:mps/widgets/sideBar.dart';
 
 class ModifyParkingLot extends StatefulWidget {
+  final String value;
+  ModifyParkingLot(this.value);
   @override
-  _ModifyParkingLotState createState() => _ModifyParkingLotState();
+  _ModifyParkingLotState createState() => _ModifyParkingLotState(value);
 }
 
 class _ModifyParkingLotState extends State<ModifyParkingLot> {
+  String value;
   File file;
   ParkingLot parking = new ParkingLot();
   String priceCar, priceBike;
   int score;
   List images = [];
   final _formKey = GlobalKey<FormState>();
+
+  _ModifyParkingLotState(String value);
 
   addParking(BuildContext context) async {
     if (_formKey.currentState.validate() && file != null) {
@@ -50,7 +55,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
           "precio": price,
           "dueno": getNameUser()
         };
-        if (uploadParkingLot(data) != null) {
+        /*if (modifyParkingLot(data,value) != null) {
           showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -58,6 +63,8 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
                   ),
               barrierDismissible: true);
           _formKey.currentState.reset();
+        }*/
+
           // showDialog(
           //   context: context,
           //   builder: (_) => new CupertinoAlertDialog(
@@ -73,7 +80,7 @@ class _ModifyParkingLotState extends State<ModifyParkingLot> {
           //     ],
           //   ),
           // );
-        }
+        
       }
     }
   }
