@@ -88,11 +88,6 @@ class AuthMethods {
     User userDetails = result.user;
 
     if (result != null) {
-      SharedPreferenceHelp().saveUserEmail(userDetails.email);
-      SharedPreferenceHelp().saveUserId(userDetails.uid);
-      SharedPreferenceHelp().saveDisplayName(userDetails.displayName);
-      SharedPreferenceHelp().saveUserProfileUrl(userDetails.photoURL);
-
       Map<String, dynamic> userInfoMap = {
         "email": userDetails.email,
         "username": userDetails.email.replaceAll("@gmail.com", ""),
@@ -107,10 +102,12 @@ class AuthMethods {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => HomeClient()));
         } else if (typeUser == 'socio') {
-          List<QueryDocumentSnapshot> lista = []; 
-              lista = await Queries().owner();
+          List<QueryDocumentSnapshot> lista = [];
+          lista = await Queries().owner();
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePartner(lista: lista)));
         }
       });
     }
