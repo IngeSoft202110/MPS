@@ -7,6 +7,8 @@ import 'package:mps/views/mainpageuser.dart';
 import 'package:mps/views/search_people.dart';
 import 'package:mps/views/widget_chat.dart';
 
+import 'homeClient.dart';
+
 class ChatRoom extends StatefulWidget {
   @override
   _ChatRoomState createState() => _ChatRoomState();
@@ -57,7 +59,7 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          "asset/images/logo_chat.png",
+          "assets/logo_chat.png",
           height: 40,
         ),
         elevation: 0.0,
