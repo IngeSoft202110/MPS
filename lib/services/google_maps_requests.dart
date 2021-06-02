@@ -12,7 +12,7 @@ class GoogleMapsServices {
     //"");
 
     var url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=AIzaSyCUZ6CZZa8u5v2fBSPcWoC3PwU9BQryT2Q');
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=AIzaSyAsdRXUYIir7nh5_YQ_t_8BFniMsBi2TEc');
 
     http.Response response = await http.get(url);
     Map values = jsonDecode(response.body);
