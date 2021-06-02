@@ -154,7 +154,8 @@ class _Search_peopleState extends State<Search_people> {
                             borderRadius: BorderRadius.circular(40)
                             ),
                         padding: EdgeInsets.all(12),
-                        child: Image.asset("asset/images/search_white.png", height: 25, width: 25,)),
+                        child: Image(image: AssetImage('assets/search_white.png')),
+                        ),
                   )
                 ],
               ),
