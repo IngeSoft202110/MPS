@@ -5,6 +5,9 @@ import 'package:mps/models/imageCarousel.dart';
 import 'package:mps/models/raiting.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/showRoute.dart';
+import 'package:mps/widgets/sideBar.dart';
+
+import 'homePartner.dart';
 
 int _rating;
 String _coment;
@@ -38,30 +41,13 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
     super.initState();
   }
 
-  _likePressed() {
-    setState(() {
-      favorite = !favorite;
-      parking = Queries().parkingLotById(value);
-      for (String i in parkingLot.data()["imagen"]) {
-        list.add(i);
-      }
-      /*final FirebaseAuth auth = FirebaseAuth.instance;
-      String userID = auth.currentUser.uid;
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(userID)
-          .collection("favorites")
-          .add();*/
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
         title: Text("Managing Parking System"),
-        actions: [
+        /*actions: [
           InkWell(
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -77,8 +63,9 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                   ],
                 )),
           )
-        ],
+        ],*/
       ),
+       drawer: SideBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -120,7 +107,7 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                           ]),
                         ],
                       ),
-                      Row(
+                      /*Row(
                         children: [
                           Padding(
                               padding: EdgeInsets.symmetric(
@@ -134,7 +121,7 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                           ),
                           Icon(Icons.link)
                         ],
-                      ),
+                      ),*/
                       ImageCarousel(list),
                       Padding(
                         padding:
@@ -186,7 +173,7 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                           Text(parking["direccion"]),
                         ],
                       ),
-                      Column(
+                      /*Column(
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
@@ -246,7 +233,7 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                             child: Text("Publicar"),
                           ),
                         ],
-                      ),
+                      ),*/
                       Row(
                         children: [
                           Padding(
@@ -292,11 +279,11 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                             ),
                         ],
                       ),
-                      Text("Seguir ruta:",
+                      /*Text("Seguir ruta:",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
-                          )),
+                          )),*/
                       Row(
                         children: [
                           Padding(
@@ -310,19 +297,17 @@ class _VisualizeParkingPartnerState extends State<VisualizeParkingPartner> {
                                 ),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
-                                child: Text("Como llegar",
+                                child: Text("Modificar UwU",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     )),
                               ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ShowRoute(
-                                            value: parking["direccion"]
-                                                .toString())));
+                              onTap: () async {
+                                List<QueryDocumentSnapshot> lista = []; 
+                                lista = await Queries().owner();
+                                Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePartner(lista:lista)));
                               },
                             ),
                           ),
