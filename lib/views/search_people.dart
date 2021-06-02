@@ -25,20 +25,10 @@ class _Search_peopleState extends State<Search_people> {
 
 
   initiateSearch() async {
-    if(searchTextEditingController.text.isNotEmpty){
-      setState(() {
-        isLoading = true;
-      });
-      await AuthMethods().getUserByname(searchTextEditingController.text)
-          .then((snapshot){
-        searchSnapshot = snapshot;
-        print("$searchSnapshot");
-        setState(() {
-          isLoading = false;
-          haveUserSearched = true;
-        });
-      });
-    }
+    AuthMethods().getUserByname(searchTextEditingController.text)
+    .then((val){
+      searchSnapshot = val;
+    });
   }
 
   Widget searchL() {
