@@ -87,7 +87,7 @@ class _AddParkingLotState extends State<AddParkingLot> {
       appBar: AppBar(
         //automaticallyImplyLeading: false,
         backgroundColor: Colors.blue[900],
-        title: Text("Add Parkinglot"),
+        title: Text("Agregar parqueadero"),
       ),
       drawer: SideBar(),
       body: SingleChildScrollView(

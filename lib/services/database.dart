@@ -251,6 +251,13 @@ Future uploadParkingLot(Map<String, dynamic> data) {
   } on FirebaseException catch (e) {
     return null;
   }
+
+  /*void modifyParkingLot(Map<String, dynamic> data,String id) {
+    
+       FirebaseFirestore.instance.collection('parqueaderos').doc(id).set(data);
+       Firebaser
+    
+  }*/
 }
 
 Future<List<QueryDocumentSnapshot>> snapshotsListFromUser(List<dynamic> ids) =>

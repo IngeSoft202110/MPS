@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mps/services/auth.dart';
 import 'package:mps/services/database.dart';
 import 'package:mps/views/userLogSign/selectUser.dart';
+import 'package:mps/views/visualizeparkingPartner.dart';
 import 'package:mps/widgets/sideBar.dart';
 
 import 'mainpageuser.dart';
@@ -16,7 +17,8 @@ class HomePartner extends StatefulWidget {
 
 class _HomePartnerState extends State<HomePartner> {
 
-  List<QueryDocumentSnapshot> lista = []; 
+  List<QueryDocumentSnapshot> lista = [];
+  String value; 
    _HomePartnerState({this.lista});
 
   @override
@@ -44,7 +46,7 @@ class _HomePartnerState extends State<HomePartner> {
                     IconButton(
                         icon: Icon(Icons.account_circle),
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MainPageUser()));
@@ -94,15 +96,15 @@ class _HomePartnerState extends State<HomePartner> {
                     leading: Image.network(course['imagen'][0]),
                     title: Text(course['nombre']),
                     subtitle: Text(course['direccion']),
-                    /*onTap: () {
+                    onTap: () {
                       value = course.reference.id;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VisualizeParking(value: value),
+                          builder: (context) => VisualizeParkingPartner(value, course),
                         ),
                       );
-                    },*/
+                    },
                   );
                 },
               ),
